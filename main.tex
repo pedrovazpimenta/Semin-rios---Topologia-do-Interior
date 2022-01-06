@@ -1,0 +1,892 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{bbm}
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+
+%\usepackage[hmargin={1 cm,1cm}, top=1cm, bottom=1cm]{geometry}
+
+
+
+\usepackage[cmtip,arrow]{xy}
+\usepackage{pb-diagram,pb-xy}
+
+
+
+
+
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\title{Apresentações - Topologia do Interior}
+\author{Pedro Vaz Pimenta}
+
+
+
+
+
+\newtheorem{mydef}{Definição}[section]
+\newtheorem{lem}[mydef]{Lema}
+\newtheorem{thrm}[mydef]{Teorema}
+\newtheorem{mthrm}[mydef]{Metateorema}
+\newtheorem{cor}[mydef]{Corolário}
+\newtheorem{prop}[mydef]{Proposição}
+\newtheorem{conj}[mydef]{Conjectura}
+\renewcommand{\theequation}{\arabic{chapter}.\arabic{section}.\arabic{equation}}
+\def\dem{\par\smallbreak\noindent {\textit{ Demonstração:}} \ }
+\def\eop{\hfill\rule{2.5mm}{2.5mm} \\ }
+
+\def\pausa{\par\smallbreak\noindent {\textbf{Pausa.}} \ }
+
+%
+%
+\theoremstyle{definition}
+\newtheorem{obs}[mydef]{Observação}
+\newtheorem{propris}[mydef]{Propriedades}
+\newtheorem{axi}[mydef]{Axioma}
+\newtheorem{ex}[mydef]{Exemplo}
+\newtheorem{exerc}[mydef]{Exercício}
+
+
+\begin{document}
+
+\maketitle
+
+{\Large \textbf{Primeira apresentação:} A construção de Henkin, ultra-produtos e uma topologia sobre teorias completas de primeira ordem.}
+
+\ \\
+
+{\Large \textbf{Resumo}}  \\
+
+
+{\small A primeira parte deste trabalho tem como objetivo fornecer provas pra resultados básicos importantes em Teoria de Modelos, começando com uma introdução básica à lógica pra chegar à construção de Henkin, que, apesar de longa, consegue ser suficientemente simples em intuitiva, proporcionando um modelo a partir de uma teoria consistente. Feito isso, faremos uma construção via ultra-produtos capaz de obter os teoremas básicos sobre Teoria de Modelos estudando uma topologia sobre teorias completas de primeira ordem. }
+
+\section{Introdução - Lógica numa casca de noz}
+
+A linguagem aqui descrita será o que se chama de \textbf{Linguagem de Primeira Ordem}, ou apenas \textbf{LPO}, que é composta por um alfabeto, um conjunto de termos e de fórmulas bem formadas. Para este tipo de linguagem, existem inúmeras variações para a escolha dos caracteres a serem usados, porém ele deverá conter alguns símbolos básicos indispensáveis, que são os chamados \textit{símbolos lógicos}: os conectivos booleanos ``e'' e ``ou'', respectivamente $\wedge$ e $\vee$; além do símbolo de negação $\neg$. Também temos os quantificadores $\forall$ e $\exists$ que simbolizam, respectivamente, o ``para todo'' e ``existe''. Além disso também devemos incluir os parênteses: ``('' e ``)''; símbolos para os objetos (que são elementos do domínio de discurso da linguagem) ou variáveis individuais, geralmente letras minúsculas do nosso alfabeto com ou sem índices, por exemplo ``$a,b,c,x,y,z,v,v_1,v_{234},v_i$''; por último temos o predicado da igualdade simbolizado por $=$, o qual, porém, não é sempre usado, existem teorias sem igualdade definida logicamente. 
+
+Agora consideramos categorias de símbolos que não aparecerão necessariamente em todo alfabeto de uma LPO, porém podem ser bem classificados: símbolos para constantes, os quais muitas vezes se confundem com os dos objetos (também chamados de variáveis). Símbolos predicados com uma aridade a princípio arbitrária(comumente igual a 2), geralmente representados por letras maiúsculas com ou sem índices ou símbolos específicos, por exemplo $<$, $\in$, etc; por último temos símbolos para funções que também possuem aridade a princípio arbitrária, normalmente representadas pelas letras ``$f$'', ``$g$'' e ``$h$'' ou símbolos específicos, por exemplo $+$, $\cap$, $\times$, etc. 
+
+As cadeias de caracteres são formadas concatenando os símbolos do alfabeto. Isto, porém, não pode ser feito de maneira arbitrária, pois não há qualquer motivo pelo qual devemos estudar uma linguagem que possui ``palavras'' como ``$()))f_a\neg \wedge(() \wedge A(BC))($'', para contornar isto construiremos primeiramente quem serão os \textbf{termos}, eles seguem a seguinte definição recursiva: 
+
+\begin{mydef}
+	
+	$\textrm{\textbf{Term}}$ é o menor conjunto tal que de todos os objetos e constantes estão nele e se $f$ é uma função de aridade $n$ e $t_1,...,t_n$ estão em $\textrm{\textbf{Term}}$ então $f_{t_1...t_n}$ também está. 
+	
+\end{mydef}
+
+Para exemplos de fórmulas que formam os termos podemos citar operações algébricas nos números reais como a soma r produto: considerando constantes $\pi$ e $\bf{e}$, que são termos, podemos formar um novo termo $+_{\pi \bf{e}}$ que escrevemos como $\pi+\bf{e}$, a partir do qual também podemos formar novos termos, por exemplo, $+_{1 +_{\pi \bf{e}}}$ que será, escrito na forma padrão, $1+(\pi+\bf{e})$. A partir dos termos, é possível construir os átomos da linguagem, que são as chamadas \textbf{fórmulas atômicas}, ou seja, as fórmulas que representam uma unidade indivisível dentro de uma teoria: 
+
+\begin{mydef}
+	
+	$\textrm{\textbf{Fa}}$ é o menor conjunto tal que $t=s$ está nele para toda escolha de termos $t$ e $s$. Se $P$ é um predicado de aridade $n$ e $t_1,...,t_n$ são termos, então $P_{t_1...t_n}$ também está nele. 
+	
+\end{mydef}
+
+Ainda na teoria dos números reais como exemplo, podemos considerar o predicado $\leq$ que tem aridade 2 e com ele montar a seguinte fórmula atômica: usando os termos $1+(\pi+\bf{e})$ e $\pi+\bf{e}$ associamos uma fórmula atômica $\leq_{1+(\pi+\bf{e}) , \pi+\bf{e}}$ que escrevemos na forma padrão como $1+(\pi+\bf{e})\leq \pi+\bf{e}$. Apesar de sabermos que esta fórmula é verdadeira, ela, a princípio, não precisa ser, consideramos também como possíveis fórmulas o exemplo $\pi+\bf{e}\leq 1+(\pi+\bf{e})$. Por último, definimos recursivamente as \textbf{fórmulas bem formadas}:
+
+\begin{mydef}
+	
+	$\textrm{\textbf{Fbf}}$ é o menor conjunto tal que:\\
+	
+	i) todos os membros de $\textrm{\textbf{Fa}}$ estão nele.\
+	
+	ii) se $\mathscr{A}$ e $\mathscr{B}$ estão inclusas, então $(\mathscr{A} \vee \mathscr{B})$ também está e se lê ``$\mathscr{A}$ ou $\mathscr{B}$''.\
+	
+	iii) se $\mathscr{A}$ está inclusa, então $(\neg \mathscr{A})$ também está e se lê como ``não  $\mathscr{A}$''. \
+	
+	iv) se  $\mathscr{A}$ está inclusa e $x$ é um objeto variável, então $((\exists x )\mathscr{A})$ está inclusa e se lê como ``existe $x$ tal que $\mathscr{A}$''.
+	
+\end{mydef}	
+
+Seguindo com os exemplos dados, temos as seguintes fórmulas bem formadas: $(1+(\pi+\bf{e})\leq \pi+\bf{e} \vee \pi+\bf{e}\leq 1+(\pi+\bf{e}))$. Também podemos usar exemplos com variáveis: $(\neg (x=\pi \vee x\leq \pi+1))$ ou incluindo quantificadores $(\exists x)(\exists y)(\neg (x=\pi \vee x\leq \pi+1))$. Este exemplo mostra que, para colocar quantificadores, a variável nem precisa ocorrer na fórmula. Um dos exemplos mais icônicos de fórmula bem formada na teoria dos números reais (que aqui incluirá símbolos da teoria dos conjuntos) é a definição de limite de uma função: $$\lim_{x\rightarrow p}f(x)=L \leftrightarrow$$ $$(\forall \varepsilon)(\exists \delta)(\varepsilon > 0 \wedge \delta >0 \rightarrow (\forall x)(x\in dom(f)\rightarrow (|x-p|<\delta \rightarrow |f(x)-L|<\varepsilon)))$$
+
+\begin{obs}
+	
+	As fórmulas que possuem outros símbolos lógicos (bastante comuns) são definidos por abreviações:\\
+	
+	a) Quantificador universal: $((\forall x) \mathscr{A})$ abrevia $(\neg ((\exists x)(\neg \mathscr{A})))$ e se lê como ``para todo $x$,  $\mathscr{A}$''.
+	
+	b) Conjunção: $(\mathscr{A} \wedge \mathscr{B})$ abrevia $(\neg ((\neg \mathscr{A}) \vee (\neg \mathscr{B})))$ e se lê ``$\mathscr{A}$ e $\mathscr{B}$''.
+	
+	c) Implicação clássica: $(\mathscr{A} \rightarrow \mathscr{B})$ abrevia $((\neg \mathscr{A}) \vee \mathscr{B})$ e se lê como ``se $\mathscr{A}$ então $\mathscr{B}$'' ou ``$\mathscr{A}$ implica $\mathscr{B}$''. 
+	
+	d) Equivalência: $(\mathscr{A} \leftrightarrow  \mathscr{B})$ abrevia $((\mathscr{A} \rightarrow \mathscr{B})\wedge (\mathscr{B} \rightarrow \mathscr{A}))$ e se lê como ``$\mathscr{A}$ se e somente se $\mathscr{B}$''.
+	
+	e) a fim de minimizar o uso de parênteses adota-se uma ordem de prioridades para os conectivos (de forma análoga ao que se aprende desde o ensino básico sobre operações matemáticas) em que quantificadores e negação possuem a mais alta e os seguintes estão em ordem decrescente: $\wedge$, $\vee$, $\rightarrow$ e $\leftrightarrow$. Além disso adota-se a associatividade à direita, por exemplo: $\mathscr{A}\wedge \mathscr{B} \wedge \mathscr{C}$ é o mesmo que $(\mathscr{A}\wedge (\mathscr{B} \wedge \mathscr{C}))$ (ser na direita ou na esquerda não faz muita diferença, já que muitos autores adotam o oposto, é uma mera questão de escolha).
+	
+	
+	
+\end{obs}
+
+Por fim, uma LPO é a terna formada por $(\mathcal{A},\textrm{\textbf{Term}},\textrm{\textbf{Fbf}})=L$ em que $\mathcal{A}$ é o alfabeto. Para completar a terminologia básica, dizemos que a ocorrência de uma variável numa fórmula é \textbf{livre} se ela não estiver quantificada, caso contrário dizemos que ela é \textbf{ligada} (esta definição pode ser feita de maneira rigorosa usando recursão). Também dizemos que uma fórmula é \textbf{fechada} se não possui variáveis livres (também chamamos tal fórmula de \textbf{sentença}). Além disso uma fórmula \textbf{aberta} é aquela que não possui quantificadores (podemos, assim, observar que existem fórmulas que são abertas e fechadas).
+
+
+Agora que temos uma LPO, inicia-se a segunda fase: definir a sintática, ou seja, dar regras para separar fórmulas da teoria em categorias especiais, que serão os axiomas e teoremas que definirão a nossa Teoria de Primeira Ordem (TPO). O primeiro passo é listar os axiomas lógicos. Os primeiros são as tautologias, mas, para defini-las, precisamos primeiro definir o que é uma \textbf{proposição}. Inicialmente usaríamos átomos (do cálculo proposicional) para formar proposições, porém este nome já foi tomado, sendo assim chamaremos eles de \textbf{fórmulas primas}:
+
+\begin{mydef}
+	
+	Seja $\mathscr{A}$ uma fórmula bem formada. Uma fórmula é prima se, e somente se, é atômica ou da forma $((\exists x) \mathscr{A})$.
+	
+\end{mydef}
+
+Como exemplos podemos considerar os exemplos atômicos já dados e fórmulas do tipo $(\exists a)(\forall x)(a+b\cdot c=\pi)$, ou seja, fórmulas bem formadas que não possuem negação ou conjunção. Agora define-se proposição recursivamente: 
+
+\begin{mydef}
+	
+	$\textrm{\textbf{Prop}}$ é o menor conjunto que contém as fórmulas primas e se $\mathscr{A}$ e $\mathscr{B}$ estão nele, então $(\mathscr{A}\vee \mathscr{B})$ e $(\neg \mathscr{A})$ também estão. 
+	
+\end{mydef}
+
+
+
+\begin{mthrm}
+	
+	$\textrm{\textbf{Prop}}	= \textrm{\textbf{Fbf}}$.
+	
+\end{mthrm}
+
+\textit{Demonstração} Por um lado, proposições são fórmulas bem formadas, pois toda fórmula prima é uma fórmula bem formada, já que fórmulas atômicas são bem formadas e $((\exists x) \mathscr{A})$ também se $\mathscr{A}$ é bem formada (por\textbf{ 1.3.iv}). Além disso fórmulas bem formadas satisfazem a segunda condição de \textbf{1.6}. Por outro lado, fórmulas bem formadas são proposições, pois em \textbf{1.3.i} são. Além disso \textbf{1.3.ii} e \textbf{1.3.iii} também resultam em proposições; se $\mathscr{A}$ é proposição ela também é fórmula bem formada como provado anteriormente, logo $((\exists x) \mathscr{A})$ também é (satisfazendo\textbf{ 1.3.iv}) e isto termina a demonstração.\eop 
+
+\begin{mydef}
+	
+	Toda fórmula bem formada (ou proposição) poderá receber um valor $0$ ou $1$ por uma função $v$ (chamada de interpretação) da seguinte forma: fixados valores de $0$ ou $1$ para $v$ em cada fórmula prima, definimos recursivamente o valor de uma fórmula arbitrária pela seguinte regra usando operações booleanas:
+	
+	i) $v((\neg \mathscr{A}))=v(\mathscr{A})'$,
+	
+	ii) $v((\mathscr{A}\vee \mathscr{B}))=v(\mathscr{A}) + v(\mathscr{B})$.
+	
+\end{mydef}
+
+Adota-se a convenção dos valores $1$ e $0$ serem nomeados como ``verdadeiro'' e ``falso'' respectivamente, daí surge o jargão ``a fórmula $\mathscr{A}$ é verdadeira na interpretação $v$'', que significa $v(\mathscr{A})=1$ (respectivamente $=0$ se for falsa), neste caso também dizemos que tal interpretação satisfaz a fórmula.
+
+
+\begin{mydef} \ \\
+	
+	a) Dizemos que uma fórmula $\mathscr{A}$  é uma \textbf{tautologia} (está em $\textrm{\textbf{Taut}}$) se a $v(\mathscr{A})=1$ para qualquer interpretação $v$. Simbolizamos por $\vDash_{\textrm{Taut}} \mathscr{A}$. \\
+	
+	b) Seja $\mathscr{A}$ uma fórmula e $\Gamma$ um conjunto de fórmulas. Dizemos que $\Gamma$ tautologicamente implica $\mathscr{A}$ se tal fórmula é satisfeita por todas as interpretações que satisfazem ao mesmo tempo cada fórmula de $\Gamma$. Simbolizamos por $\Gamma \vDash_{\textrm{Taut}} \mathscr{A}$.
+	
+\end{mydef}
+
+Por fim, resta apenas definir algumas convenções: se $x$ é uma variável em $\mathscr{A}$ e $t$ é um termo qualquer, podemos substituir toda ocorrência livre de $x$ em $\mathscr{A}$ por $t$, simbolizamos isso por $\mathscr{A}[t]$. Com isso podemos finalmente listar os axiomas lógicos de uma TPO: 
+
+\begin{axi} \ \\
+	
+	1. Todas as fórmulas em $\textrm{\textbf{Taut}}$. \\
+	
+	2. (esquema) para cada termo $t$, variável $x$ e fórmula $\mathscr{A}$, a fórmula:
+	
+	$$\mathscr{A}[t]\rightarrow (\exists x)\mathscr{A}.$$ 
+	
+	3. (esquema) para cada variável $x$, a fórmula $x=x$. \\
+	
+	4. (esquema - Caracterização de Leibniz da igualdade) Para cada fórmula $\mathscr{A}$, variável $x$ e termos $t$ e $s$, a fórmula: 
+	
+	$$t=s\rightarrow (\mathscr{A}[t]\leftrightarrow \mathscr{A}[s]).$$
+	
+	
+	
+\end{axi}
+
+Chamaremos o conjunto dos axiomas lógicos de uma TPO de $\Lambda$. Vale notar que nem sempre se usam os axiomas \textbf{1.10.3} e \textbf{1.10.4}, algumas teorias específicas possuem uma noção própria de igualdade (ou, dependendo, nenhuma). Cabe agora definir as regras de inferência: 
+
+\begin{mydef} \ \\
+	
+	1. (Modus Ponens) Para quaisquer fórmulas $\mathscr{A}$ e $\mathscr{B}$ temos: 
+	
+	$$\mathscr{A}, \mathscr{A}\rightarrow \mathscr{B}\vdash \mathscr{B}.$$
+	
+	2. (Introdução Existencial) Para quaisquer fórmulas $\mathscr{A}$ e $\mathscr{B}$ tais que $x$ não é livre em  $\mathscr{B}$, temos:
+	
+	$$  \mathscr{A}\rightarrow \mathscr{B}\vdash (\exists x) \mathscr{A}\rightarrow \mathscr{B} .$$
+	
+	
+	
+\end{mydef}
+
+Todas as deduções numa TPO serão feitas a partir destas duas regras, também já foi introduzida a notação $\vdash$ em que na esquerda temos premissas e na direita conclusões. Observamos que estas duas regras fornecem uma maneira recursiva de, a partir de $\Lambda$ e um conjunto de fórmulas $\Gamma$, gerar um novo conjunto de fórmulas, isto é o que chamamos de $\Gamma$-\textbf{teoremas} sendo $\Gamma$ um conjunto de \textbf{axiomas não-lógicos}. Precisamente, temos: 
+
+\begin{mydef}
+	
+	O conjunto  $\textrm{\textbf{Teo}}_\Gamma$ é o fecho recursivo de $\Lambda$ e $\Gamma$ sobre as regras  \textbf{1.11.1} e \textbf{1.11.2}.
+	
+\end{mydef}
+
+A \textbf{demonstração} de tais teoremas consiste em exibir cada passo (ou derivação) partindo das premissas até chegar na conclusão utilizando as regras de inferência. Com isso podemos definir uma TPO como $\mathcal{T}=(L,\Lambda,\textrm{\textbf{I}},\mathscr{T})$, sendo $\textrm{\textbf{I}}$ as regras de inferência e $\mathscr{T}$ um conjunto que contém $\Lambda$ e é fechado por $\vdash$. Normalmente temos que $\mathscr{T}=\textrm{\textbf{Teo}}_\Gamma$ para algum $\Gamma$, sendo que $\Gamma$ não é necessariamente subconjunto próprio de $\mathscr{T}$, já que podemos tomar $\Gamma=\mathscr{T}$. Em todo caso, dizemos que a teoria é axiomatizada por $\Gamma$ e, caso este conjunto possa ser gerado ``algoritmicamente'', dizemos que ela é recursivamente axiomatizada. Dizemos ainda que duas teorias são uma extensão da outra caso o alfabeto da primeira esteja contido no alfabeto da segunda e o mesmo se aplica para o conjunto de teoremas. Se $\mathscr{T}=\textrm{\textbf{Fbf}}$ dizemos que a teoria é trivial ou \textbf{inconsistente}, caso contrário dizemos que é consistente. Agora serão mostrado alguns dos principais metateoremas que resultam desta estrutura sintática. O primeiro revela uma interação bem interessante (e útil) entre $\vdash$ e $\vDash_{\textrm{Taut}}$:
+
+\begin{mthrm}
+	
+	Se $\mathscr{A}_1,...,\mathscr{A}_n\vDash_{\textrm{Taut}} \mathscr{B}$ então $\mathscr{A}_1,...,\mathscr{A}_n\vdash  \mathscr{B}$.
+	
+\end{mthrm}
+
+\pausa Vale a volta? Esta é uma pergunta importante neste tipo de teorema e a resposta para ela é \textbf{não}. Deduções e tautologias são apenas equivalentes no contexto proposicional, isso deixa de ocorrer quando as regras de inferência envolvem quantificadores, conforme ocorre em\textbf{ 1.11.2}. 
+
+\dem A hipótese é equivalente a 
+
+$$\vDash_{\textrm{Taut}} \mathscr{A}_1 \rightarrow ... \rightarrow \mathscr{A}_n \rightarrow \mathscr{B}.$$
+
+Logo esta fórmula está em $\Lambda$ e, pela definição\textbf{ 1.12}, temos que:
+
+$$\mathscr{A}_1,...,\mathscr{A}_n\vdash  \mathscr{A}_1 \rightarrow ... \rightarrow \mathscr{A}_n \rightarrow \mathscr{B} .$$
+
+Aplicando \textbf{1.11.1} $n$ vezes, deduzimos $ \mathscr{B}$. \eop 
+
+\begin{mthrm}
+	
+	Seja $\mathscr{A}$ uma fórmula fechada, $\mathscr{B}$ uma fórmula qualquer e $\Gamma$ um conjunto de fórmulas. Se $\Gamma + \mathscr{A} \vdash \mathscr{B}$ então $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{B}$.
+	
+\end{mthrm}
+
+\pausa $\Gamma + \mathscr{A}$ denota a adição da fórmula $\mathscr{A}$ ao conjunto $\Gamma$. Neste teorema estamos adicionando apenas uma fórmula, porém esta notação também será usada caso $\mathscr{A}$ seja um esquema. A volta deste teorema não  é citada por ser trivial (aplicação direta de\textbf{ 1.11.1}) e não adicionar nada relevante à teoria. 
+
+\dem A prova consiste em usar indução sobre os teoremas de $\Gamma + \mathscr{A}$. 
+
+Base: Seja $\mathscr{B}$ um axioma (lógico ou não lógico e, a princípio, diferente de $\mathscr{A}$), então $\Gamma\vdash \mathscr{B}$. Como  $\mathscr{B} \vDash_{\textrm{Taut}} \mathscr{A}\rightarrow \mathscr{B}$, aplicando o resultado anterior, segue que $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{B}$. Se são iguais, $\mathscr{A}\rightarrow \mathscr{B}$ é uma tautologia, portanto $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{B}$ novamente.
+
+Passo indutivo em Modus Ponens: considere que $\Gamma + \mathscr{A} \vdash \mathscr{C}$ e $\Gamma + \mathscr{A} \vdash \mathscr{C}\rightarrow \mathscr{B}$. Pela Hipótese de Indução $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{C}$ e $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{C} \rightarrow \mathscr{B}$, como $\mathscr{A} \rightarrow \mathscr{C},  \mathscr{A} \rightarrow \mathscr{C} \rightarrow \mathscr{B}\vDash_{\textrm{Taut}} \mathscr{A} \rightarrow \mathscr{B}$, segue que $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{B}$.
+
+Passo indutivo na Introdução Existencial: considere que $\Gamma + \mathscr{A} \vdash \mathscr{C}\rightarrow \mathscr{D}$ e a fórmula $\mathscr{B}$ é da forma $(\exists x)\mathscr{C}\rightarrow \mathscr{D}$ sendo que $x$ não é livre em $\mathscr{D}$. Pela hipótese de indução $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{C} \rightarrow \mathscr{D}$, como $ \mathscr{A} \rightarrow \mathscr{C} \rightarrow \mathscr{D}\vDash_{\textrm{Taut}}  \mathscr{C} \rightarrow \mathscr{A} \rightarrow \mathscr{D}$, usando o metateorema anterior, temos que $\Gamma \vdash \mathscr{C} \rightarrow \mathscr{A} \rightarrow \mathscr{D}$, aplicando \textbf{1.11.2} temos que  $\Gamma \vdash (\exists x)\mathscr{C} \rightarrow \mathscr{A} \rightarrow \mathscr{D}$ (lembrando que aqui se usa que $\mathscr{A}$ é fechado), aplicando novamente o mesmo argumento usando o metateorema anterior, temos que $\Gamma \vdash \mathscr{A} \rightarrow (\exists x)\mathscr{C} \rightarrow \mathscr{D}$, portanto $\Gamma \vdash \mathscr{A} \rightarrow \mathscr{B}$. \eop 
+
+Disto segue um resultado amplamente aplicado na hora de demonstrar teoremas: a Prova por Contradição. Nesta formulação fica clara o quanto ela é diferente de uma demonstração por contraposição (e como é mais forte), já que, em vez de uma fórmula, temos um conjunto de fórmulas como premissa: 
+
+\begin{cor}
+	
+	Seja $ \mathscr{A}$ fechada. Então $\Gamma \vdash \mathscr{A}$ se, e somente se, $\Gamma + \neg \mathscr{A}$ é inconsistente. 
+	
+\end{cor}   
+
+\dem Por um lado, se $\mathscr{T}=\textrm{\textbf{Fbf}}$ em que  $\mathscr{T}$ é a o conjunto de teoremas gerados por $\Gamma + \neg \mathscr{A}$ então, em particular, $\Gamma + \neg \mathscr{A}\vdash \mathscr{A} $. Pelo teorema da dedução, $\Gamma \vdash  \neg \mathscr{A} \rightarrow \mathscr{A}$, porém $\neg \mathscr{A} \rightarrow \mathscr{A} \vDash_{\textrm{Taut}} \mathscr{A}$, portanto $\Gamma \vdash \mathscr{A} $. Por outro lado, dado que  $\Gamma \vdash \mathscr{A}$, temos que  $\Gamma + \neg  \mathscr{A} \vdash \mathscr{A}$ também. Obviamente $\Gamma + \neg  \mathscr{A} \vdash \neg \mathscr{A}$. Como $\mathscr{A}, \neg \mathscr{A}\vDash_{\textrm{Taut}} \mathscr{B} $ para qualquer fórmula bem formada $\mathscr{B}$, temos que $\Gamma + \neg \mathscr{A} \vdash \mathscr{B}$ para qualquer fórmula $\mathscr{B}$, portanto $\Gamma + \neg \mathscr{A}$ é inconsistente. \eop
+
+Isto termina aquilo que considero importante sobre a sintaxe e sintática, agora inicia-se a segunda fase no estudo da lógica matemática: a semântica. A definição mais propagada de semântica para teorias formais de primeira ordem, que é usada na maior parte da literatura em lógica matemática e teoria de modelos, foi feita por Alfred Tarski e, por esta razão, chamamos de Semântica de Tarski. A ideia por trás desta semântica é a representação formal do conceito de ``verdade'' de tal forma que seja separada da sintaxe e sintática, uma vez que, se for permitido haver construções sintáticas que afirmam sobre o valor verdade de uma fórmula, há o risco de surgir problemas como o famoso paradoxo do mentiroso e, mesmo que isso seja evitado, Tarski mostrou que o conceito de verdade não pode ser sintaticamente definível, isto será tratado adiante. 
+
+\begin{mydef}
+	
+	Dada uma LPO $L=(\mathcal{A},\textrm{\textbf{Term}},\textrm{\textbf{Fbf}})$, uma estrutura $\mathfrak{M}=(M,\mathscr{I})$ apropriada para $L$ deve ser tal que $M$ (uma classe não vazia chamada de universo) e $\mathscr{I}$ (chamada de função interpretação - vale notar que ela é algo bastante diferente da interpretação proposicional) satisfaçam as condições:\\
+	
+	1. para cada constante $a$ de $\mathcal{A}$ esta função associa $a^\mathscr{I}$ em $M$. \\
+	
+	2. para cada função $f$ de $\mathcal{A}$ com aridade $n$ uma função $f^\mathscr{I}:M^n\rightarrow M$. \\
+	
+	3. para cada predicado $P$ de $\mathcal{A}$ com aridade $n$ uma função $P^\mathscr{I}:M^n\rightarrow \{0,1\}$.
+	
+\end{mydef}
+
+Em que $ \{0,1\}$ é munido com as operações booleanas. Seguem algumas definições adicionais:
+
+\begin{mydef}
+	
+	Seja $L$ uma linguagem e $\mathfrak{M}=(M,\mathscr{I})$ uma estrutura apropriada. Denotamos $L(\mathfrak{M})$ a linguagem obtida adicionando ao alfabeto de $L$ um único novo \textbf{nome} $\overline{i}$ para cada elemento $i$ de $M$, sendo que $\overline{i}^\mathscr{I}=i$. Isso faz com que $\textrm{\textbf{Term}}$ e $\textrm{\textbf{Fbf}}$ tornem-se $\textrm{\textbf{Term}}(\mathfrak{M})$ e $\textrm{\textbf{Fbf}}(\mathfrak{M})$.
+	
+\end{mydef}
+
+Agora será definido recursivamente o significado de termos fechados em $L(\mathfrak{M})$:
+
+\begin{mydef}
+	
+	Para termos $t$ fechados de $\textrm{\textbf{Term}}(\mathfrak{M})$ definimos o símbolo $t^\mathscr{I}$ em $M$ indutivamente: \\
+	
+	(a) Se $t$ é uma constante original ou da forma $\overline{i}$, $t^\mathscr{I}$ já está definido. 
+	
+	(b) Se $t$ é a cadeia de símbolos formada por $f_{t_1 ... t_n}$ e $t_1,...,t_n$ são termos fechados em $\textrm{\textbf{Term}}(\mathfrak{M})$, então $t^\mathscr{I}$ é nada menos que $f^\mathscr{I}(t_1^\mathscr{I}, ..., t_n^\mathscr{I})$.
+	
+\end{mydef}
+
+Finalmente podemos definir o valor verdade para fórmulas bem formadas: 
+
+\begin{mydef}
+	
+	Seja $\mathscr{A}$ uma fórmula fechada em $\textrm{\textbf{Fbf}}(\mathfrak{M})$, definimos indutivamente $\mathscr{A}^\mathscr{I}$ da seguinte forma, em todos os casos assumindo valores em $\{ 0,1\}$: \\
+	
+	1. Se $\mathscr{A}$ é da forma $t=s$ para termos fechados $t$ e $s$ em  $\textrm{\textbf{Term}}(\mathfrak{M})$, então $\llbracket\mathscr{A}\rrbracket=1$ se, e somente se, $t^\mathscr{I}=s^\mathscr{I}$ (obs: nas duas últimas ocorrências do símbolo ``='', ele é metateórico, isso também ocorre nas próximas definições). \\
+	
+	2. Se $\mathscr{A}$ é da forma $P_{t_1...t_n}$, sendo $P$ um predicado de aridade $n$ e $t_1,...,t_n$ são termos fechados em  $\textrm{\textbf{Term}}(\mathfrak{M})$, então $\llbracket\mathscr{A} \rrbracket=1$ se, e somente se, $P^\mathscr{I}(t_1^\mathscr{I},...,t_n^\mathscr{I})=1$. \\
+	
+	3. Se $\mathscr{A}$ é uma sentença da forma $\neg \mathscr{B}$ ou $\mathscr{B}\vee \mathscr{C}$, o valor de $\llbracket\mathscr{A} \rrbracket$ é determinado exatamente como feito em \textbf{1.1.8}. \\
+	
+	4. Se $\mathscr{A}$ é da forma $(\exists x) \mathscr{B}$ então $\llbracket\mathscr{A} \rrbracket=1$ se, e somente se, $\llbracket \mathscr{B}[\overline{i}] \rrbracket=1$ para algum $i$ em $M$.
+	
+	
+\end{mydef}
+
+Com isso podemos definir precisamente o que é um ``modelo'': uma $\mathfrak{M}$-instância de $\mathscr{A}$ consiste em substituir as variáveis livres da fórmula por termos do tipo $\overline{i}$, com isso dizemos que tal fórmula é \textbf{válida} em  $\mathfrak{M}$ se, e somente se, para todas as $\mathfrak{M}$-instância $\mathscr{A}'$ de $\mathscr{A}$ temos que o $\llbracket \mathscr{A}' \rrbracket=1$, simbolizamos isso por $\vDash_\mathfrak{M} \mathscr{A}$. O mesmo pode ser pensado para um conjunto $\Gamma$ de fórmulas, sendo que $\vDash_\mathfrak{M} \Gamma$ significa que  $\mathfrak{M}$ é um \textbf{modelo} de $\Gamma$. Além disso, dizemos que a fórmula $\mathscr{A}$ é universalmente válida ou \textbf{logicamente válida} se toda estrutura apropriada é modelo de $\mathscr{A}$; neste caso simbolizamos por $\vDash \mathscr{A}$. Por fim, dizemos que $\Gamma$ é \textbf{satisfazível} se possui um modelo, dizemos ainda que é finitamente satisfazível de todo subconjunto finito é satisfazível.
+
+\begin{mydef}
+	
+	Dizemos que $\Gamma$ implica $\mathscr{A}$ logicamente se todo modelo de $\Gamma$ também é modelo de  $\mathscr{A}$, simbolizamos como $\Gamma \vDash \mathscr{A}$. Também temos que uma TPO com axiomas não lógicos $\Gamma$ é \textbf{sound} se para toda fórmula $\mathscr{A}$ temos que $\Gamma \vdash \mathscr{A}$ implica  $\Gamma \vDash \mathscr{A}$. Por outro lado, se $\Gamma \vDash \mathscr{A}$ implica $\Gamma \vdash \mathscr{A}$, dizemos que a teoria é \textbf{semanticamente completa}. Uma teoria é \textbf{simplesmente completa} (ou sintaticamente completa) se, dada uma sentença $\mathscr{A}$, podemos deduzi-la ou deduzir sua negação.  
+	
+	
+\end{mydef}
+
+Com isso temos o seguinte resultado: 
+
+\begin{mthrm}
+	
+	Toda TPO é sound.
+	
+\end{mthrm}
+
+\dem Para isso faremos uma indução sobre os teoremas da TPO em questão. Por hipótese, temos que se $\mathscr{A}\in \Gamma$ então $\llbracket \mathscr{A} \rrbracket_A =1$, o que nos dá a base da indução (o axiomas lógicos também possuem valor 1 por hipótese). Assim, primeiro provaremos o passo indutivo pra Modus Ponens: suponto $\llbracket \mathscr{A} \rrbracket_A =\llbracket \mathscr{A}\rightarrow \mathscr{B} \rrbracket_A =1$ temos que $$1=\llbracket \mathscr{A}\rightarrow \mathscr{B} \rrbracket_A =\llbracket \mathscr{A} \rrbracket_A\Rightarrow \llbracket \mathscr{B} \rrbracket_A=\llbracket \mathscr{A} \rrbracket'_A + \llbracket \mathscr{B} \rrbracket_A=0+\llbracket \mathscr{B} \rrbracket_A=\llbracket \mathscr{B} \rrbracket_A$$ pois $\llbracket \mathscr{A} \rrbracket_A=1$ logo $\llbracket \mathscr{A} \rrbracket'_A=0$. Resta demonstrar o resultado para a introdução existencial: supomos que $\llbracket \mathscr{A}\rightarrow \mathscr{B} \rrbracket_A =1$, para mostrar que $\llbracket (\exists x)\mathscr{A}\rightarrow \mathscr{B} \rrbracket_A =1$ basta mostrar que para alguma instância a fórmula $\mathscr{A}(x)\rightarrow \mathscr{B} $ tem valor 1, ou seja, ao substituir algum nome $i$ na variável $x$ ela possuirá o valor 1. Suponhamos que isso não acontece, ou seja, todo nome $i$ faz $\llbracket \mathscr{A}[i] \rrbracket_A =1$ e $\llbracket \mathscr{B} \rrbracket_A =0$. Por hipótese, $\llbracket \mathscr{A}\rightarrow \mathscr{B} \rrbracket_A =1$, ou seja $\llbracket \mathscr{A} \rrbracket_A=0$ ou $\llbracket\mathscr{B} \rrbracket_A =1$. Como $x$ não ocorre em $\mathscr{B}$, seu valor será sempre zero, portanto $\llbracket \mathscr{A} \rrbracket_A=0$ necessariamente, mas isso contradiz o fato de que $\llbracket \mathscr{A}[i] \rrbracket_A =1$ para todo nome $i$. \eop
+
+O que garante corolários bem interessantes: 
+
+\begin{cor}
+	
+	Toda teoria pura de primeira ordem (ou seja, sem axiomas não-lógicos) é consistente.
+	
+\end{cor}   
+
+\dem Como $\neg x=x$ não é uma verdade lógica, segue que não se trata de uma fórmula dedutível numa TPO. Caso a teoria não tenha igualdade, tome a negação de uma tautologia qualquer construída a partir de termos da linguagem. \eop
+
+\begin{cor}
+	
+	Toda teoria de primeira ordem que possui um modelo é consistente.
+	
+\end{cor}
+
+\dem Como $\neg x=x$ não é satisfeita para um modelo qualquer da teoria, segue que não se trata de uma fórmula dedutível na mesma. Caso a teoria não tenha igualdade, tome a negação de uma tautologia qualquer construída a partir de termos da linguagem. \eop
+
+Apesar do último corolário ser bastante simples, sua volta precisa de uma prova bem mais sofisticada e será o início da parte que realmente interessa no texto:
+
+\section{Henkin e a existência de modelos}
+
+O objetivo desta seção será demonstrar o seguinte:
+
+\begin{mthrm}
+	
+	Seja $T$ uma teoria completa sobre sobre uma linguagem $L$, então $T$ tem um modelo. 
+	
+\end{mthrm}
+
+Faremos esta demonstração a partir de uma série de lemas, a começar por:  
+
+\begin{lem}
+	
+	O conjunto de teorias completas sobre uma linguagem $L$ é não vazio.
+	
+\end{lem}
+
+\dem Começamos observando que o conjunto das teorias consistentes sobre uma linguagem é não vazio já que, ao menos, a teoria lógica pura está lá, pois é consistente pela propriedade de soundness. Seja agora $A$ o conjunto de todas as extensões consistentes da lógica pura, ou seja, conjuntos em que adicionamos novas fórmulas mantendo a consistência. Tal conjunto é parcialmente ordenado por $\subset$, ou seja, podemos ter cadeias de teorias consistentes "encaixadas"; ora, tal cadeia possui uma cota superior, bastando tomar sua união. O caso finito é imediato, consideremos um infinito: Seja $T_i$, $i\in I$ uma cadeia de teorias consistentes e $T=\cup_{i\in I}T_i$. Se $T$ é inconsistente então existe uma prova contraditória neste conjunto, ou seja, existem $i,j\in I$, com $i<j$, tais que $\mathscr{A}\in T_i$ e $\neg \mathscr{A}\in T_j$, porém, como estamos falando de uma cadeia, temos que $\mathscr{A}\in T_j$, logo $T_j$ é inconsistente, absurdo. 
+
+Ou seja, acabamos de mostrar que, pelo Lema de Zorn, o conjunto das teorias consistentes sobre uma linguagem possui um elemento maximal, basta mostrar que um elemento deste conjunto é maximal se, e somente se, é completo. Se ele é completo, a propriedade de ser maximal é imediata. Assim, só é preciso mostrar que todo maximal será completo. Seja $T$ um elemento maximal e suponha que, pra alguma fórmula não contraditória $\mathscr{A}$, $T\nvdash \mathscr{A}$ e $T\nvdash \neg \mathscr{A}$. Pela maximalidade de $T$, $T+\mathscr{A}$ é inconsistente, porém isso implica que $T\vdash \neg \mathscr{A}$ pela prova por contradição. O caso de $T+\neg \mathscr{A}$ é análogo, portanto chegamos a um absurdo ao supor a incompletude de $T$, logo tal teoria é completa. \eop
+
+Para que a construção topológica que faremos adiante faça sentido, é preciso mostrar agora que, se $\mathscr{A}$ é uma fórmula não contraditória, então existe uma teoria completa $T$ tal que $T\vdash \mathscr{A}$. Seja $\Lambda$ o conjunto (consistente) de axiomas lógicos, se $\Lambda+\mathscr{A}$ é inconsistente, então $\Lambda\vdash \neg\mathscr{A}$, ou seja $\neg\mathscr{A}$ é uma verdade lógica, porém isso implica que  $\mathscr{A}$ é contraditória, absurdo, portanto $\Lambda+\mathscr{A}$ é consistente e toda a demonstração anterior pode ser feita pra extensões consistentes da teoria gerada pelo fecho recursivo de $\Lambda+\mathscr{A}$ pelas regras de inferência. Observamos que isso pode ser feito com qualquer conjunto de fórmulas consistentes, ou seja, se $\Gamma$ tem esta propriedade, podemos estendê-lo para uma teoria completa.
+
+Agora, para finalizar a prova do teorema da consistência, usaremos a construção de Henkin: 
+
+\begin{mydef}
+	
+	Uma teoria $T$ sobre uma linguagem $L$ é dita de Henkin se, para cada sentença do tipo $(\exists x)(\mathscr{A}(x))$, exste uma constante $c$ tal que $(\exists x)(\mathscr{A}(x))\rightarrow \mathscr{A}[c] \in T$, tal constante chamamos de ``testemunha'' de  $(\exists x)(\mathscr{A}(x))$.
+	
+\end{mydef}
+
+Intuitivamente, uma teoria de Henkin é aquela em que o axioma lógico \textbf{1.10.2} é da forma ``se e somente se'', o que permitiria olharmos para uma TPO como algo puramente proposicional. Isso mostra a ideia de como quantificadores dificultam a construção de modelos: se não os tivéssemos, obter uma estrutura seria trivial, enquanto os quantificadores dificultam enormemente a construção para teorias de primeira ordem, sendo que o problema é contornado fazendo uma extensão da teoria que possa ser tratada de forma proposicional. Por fim, em linguagens de ordem superior sequer há a garantia de existência de modelos para teorias consistentes. Desta forma, provaremos que realmente é simples definir um modelo com uma teoria completa de Henkin: 
+
+\begin{lem}
+	
+	Se $T$ é uma teoria completa de Henkin, então é possível construir um modelo canônico para $T$.
+	
+\end{lem}
+
+\dem Seja $A$ o conjunto que contém as fórmulas fechadas de $T$, com isso definimos os nomes e funções conforme \textbf{1.16}, sendo que predicados são tais que $P: A^n\rightarrow \{0,1\}$ e $P(t_1,...,t_n)=1$ se, e somente se, $T\vdash P(t_1,...,t_n)$ (para que fique claro, estamos abusando da notação identificando elementos sintáticos com nomes). Com isso, resta definir uma relação de equivalência que primeiro será definida para da igualdade (caso ``='' seja símbolo lógico): $t \sim s$ se, e somente se, $T\vdash t=s$, além disso, se $t_i \sim s_i$ e $P(t_1,...,t_p)=1$ então $P(s_1,...,s_n)=1$, além disso, se $t_i\sim s_i$ então $f(t_1,...,t_p)\sim f(s_1,...,s_p)$, tudo isso para $i\leq p$. 
+
+Assim nossa estrutura terá como universo $A/\sim$ e escrevemos o representante da classe onde $t$ está por $[t]$, além disso identificaremos $t^{\mathscr{I}}=[t]$, o que se mostra válido utilizando indução e, pelo mesmo processo, observamos que $t^{\mathscr{I}}=[f(t_1,...,t_n)]$, o mesmo poderá ser verificado que, para uma fórmula $\mathscr{A}[t]$, temos que $\llbracket \mathscr{A}[t] \rrbracket=1$ se e somente se  $\llbracket \mathscr{A}[[t]] \rrbracket=1$. 
+
+Por fim, resta mostrar que  $\llbracket \mathscr{A}\rrbracket=1$ se, e somente se, $ T \vdash \mathscr{A}$. 
+
+Para isso usaremos indução. Para o caso da fórmula ser atômica, a verificação é trivial e segue diretamente da definição. Suponha que  $\llbracket \mathscr{A}\rrbracket=1$ se, e somente se, $ T \vdash \mathscr{A}$, o que é equivalente a $\llbracket \mathscr{A}\rrbracket=0$ se, e somente se, $ T \nvdash \mathscr{A}$, o que é equivalente a $\llbracket \neg \mathscr{A}\rrbracket=1$ se, e somente se, $ T \vdash \neg \mathscr{A}$ (pois $T$ é completa). 
+
+Suponha também que $\llbracket \mathscr{B}\rrbracket=1$ se, e somente se, $ T \vdash \mathscr{B}$. Se $T\vdash \mathscr{B} \vee \mathscr{A}$ temos que  $T\vdash \mathscr{B}$ ou  $T\vdash \mathscr{A}$, em qualquer caso temos que $1=\llbracket \mathscr{A}\rrbracket + \llbracket \mathscr{B}\rrbracket=\llbracket \mathscr{A}\vee \mathscr{B} \rrbracket$. Se $\llbracket \mathscr{A}\vee \mathscr{B} \rrbracket=1$ então $\llbracket \mathscr{A}\rrbracket + \llbracket \mathscr{B}\rrbracket=1$, logo $\llbracket \mathscr{A} \rrbracket=1$ ou $\llbracket \mathscr{A} \rrbracket=1$, portanto  $ T \vdash \mathscr{A}$ ou  $ T \vdash \mathscr{B}$, em qualquer caso temos que  $ T \vdash \mathscr{A}\vee \mathscr{B}$. 
+
+Agora suponha que  $\llbracket (\exists x)\mathscr{A}(x) \rrbracket=1$, como $(\exists x)\mathscr{A}(x)\leftrightarrow \mathscr{A}[t]$ então $\llbracket \mathscr{A}[t] \rrbracket=1$ e, pela hipótese de indução, $T\vdash \mathscr{A}[t]$, usando novamente equivalência entre as fórmulas, temos que $T\vdash (\exists x)\mathscr{A}(x)$. A prova para a outra implicação é análoga. Com isso concluímos que tal estrutura realmente fornece um modelo para $T$. \eop
+
+Para concluir a construção de Henkin, é preciso mostrar que, dada uma teoria completa $T$ é possível estendê-la para uma versão de Henkin $T'$ tal que $T\vdash \mathscr{A}$ se, e somente se,  $T'\vdash \mathscr{A}$ se tal fórmula é construída apenas por elementos da linguagem de $T$ e, para isso, estenderemos o alfabeto e a linguagem de forma que forma a incluir uma testemunha $c_{\mathscr{A}}$ para cada fórmula da forma $(\exists x)\mathscr{A}(x)$ e a $T$ adicionaremos o conjunto $A=\{ (\exists x)\mathscr{A}(x)\rightarrow \mathscr{A}[c_{\mathscr{A}}] : \text{ a fórmula }  (\exists x)\mathscr{A}(x) \text{ é fechada}\}$, assim definimos $T^*$ como sendo o fecho recursivo de $T\cup A$ pelas regras de inferência e sendo $L^*$ sua linguagem. Com isso provaremos esta forma de estender a teoria é, num sentido, conservativa: 
+
+\begin{lem}
+	
+	$T\vdash \mathscr{A}$ se, e somente se,  $T^*\vdash \mathscr{A}$ para toda fórmula $\mathscr{A}$ na linguagem de $T$.
+	
+\end{lem} 
+
+\dem Se $T\vdash \mathscr{A}$ claramente  $T^*\vdash \mathscr{A}$ uma vez que $T$ faz parte dos axiomas para $T^*$. Supomos agora que  $T^*\vdash \mathscr{A}$, isso é o mesmo que $T+A\vdash \mathscr{A}$, porém podemos assumir, sem perda de generalidade, que $T+C\vdash \mathscr{A}$ para $C\subset A$ finito, assim podemos reescrever $C\setminus \{ (\exists x)\mathscr{B}(x)\rightarrow \mathscr{B}[c_{\mathscr{B}}] \}=C'$ para alguma fórmula deste tipo em $C$ e, como $$T+C'\vdash ((\exists x)\mathscr{B}(x)\rightarrow \mathscr{B}[c_{\mathscr{B}}])\rightarrow \mathscr{A},$$ pelo teorema da dedução, podemos substituir $[ c_{\mathscr{B}}]$ por uma variável livre $y$ de $L$ e aplicar a introdução existencial obtendo $$T+C'\vdash ((\exists x)\mathscr{B}(x)\rightarrow (\exists y)\mathscr{B}(y))\rightarrow \mathscr{A},$$ porém temos que $\vDash_{\textbf{Taut}} (\exists x)\mathscr{B}(x)\rightarrow (\exists y)\mathscr{B}(y)$, com isso podemos eliminar esta parte da fórmula, donde concluímos que $T+C'\vdash \mathscr{A}$. Agora basta repetir o processo uma quantidade finita de vezes até acabarem todos os elementos $C$ e, por fim, concluímos que $T\vdash \mathscr{A}$ \eop
+
+Esta propriedade de ser conservativa será importante pois, se tivermos um modelo para uma extensão conservativa de uma teoria $T$, então esta estrutura também será modelo para $T$. Apesar da intuição sugerir, não é claro que $T^*$ seja de Henkin, assim, faremos o processo anterior de forma iterada $\omega$ vezes para garantir que obteremos no final aquilo que queremos, ou seja, $T_0=T$, $T_{n+1}=T_n^*$ e $T_\omega =\bigcup_{i\in \omega}T_i$. Definimos, da mesma maneira, a linguagem de cada $T_n$ e $T_\omega$ como $L_n$ e $L_\omega$ respectivamente e, com isso, temos o último:
+
+\begin{lem}
+	
+	Seja $T$ uma teoria completa na linguagem $L$. Então existirá $T_\omega$ com a propriedade conservativa como no lema anterior e é uma teoria de Henkin completa.
+	
+\end{lem}
+
+\dem  Se $T_\omega$ não é completa, é possível completá-la como feito em\textbf{ 2.2} e ela continua sendo Henkin, afinal, como a linguagem é a mesma, todas as fórmulas existenciais em $\mathscr{B}$ já possuem testemunhas e, para elas, é válido o axioma $(\exists x)\mathscr{B}(x)\rightarrow \mathscr{B}[c_{\mathscr{B}}]$. A prova de que $T_\omega$ estende $T$ de forma conservativa é uma simples verificação usando indução em $T_n$ e observando que, como $T_n$ é conservativa, então se $T_\omega\vdash \mathscr{A}$ então $T_n\vdash \mathscr{A}$ par algum $n$. Por fim, temos que $T_\omega$ é uma teoria de Henkin: seja $(\exists x)\mathscr{A}(x)$ uma fórmula em $L_\omega$, logo $(\exists x)\mathscr{A}(x)$ é uma fórmula em $L_n$ para algum $n$, portanto $(\exists x)\mathscr{A}(x)\rightarrow \mathscr{A}[c]$ está em $T_{n+1}$ para $c$ em $L_{n+1}$, donde concluímos que $(\exists x)\mathscr{A}(x)\rightarrow \mathscr{A}[c]$ está em $T_\omega$. \eop
+
+E isto termina a demonstração de \textbf{2.1}. Encerramos esta seção com alguns corolários, o primeiro é o Teorema da Consistência:
+
+\begin{cor}
+	
+	Toda teoria consistente possui um modelo.
+	
+\end{cor}
+
+\dem Esta teoria pode ser estendida para uma teoria de Henkin, a qual pode ser estendida pra uma versão completa de Henkin, a qual possui um modelo conforme construímos em \textbf{2.4}. \eop
+
+O próximo resultado é a versão mais simples do Teorema de Löwenheim-Skolem na versão ``Downward'':
+
+\begin{cor}
+	
+	Seja $T$ uma teoria numa linguagem enumerável $L$. Se $T$ tem um modelo, então tem um modelo enumerável. 
+	
+\end{cor}
+
+\dem Se $T$ possui um modelo, então é consistente (por soundness), como $L$ e $T$ são enumeráveis, o completamento de Henkin de $T$ também é e seu modelo, conforme definido em \textbf{2.4}, também será. \eop
+
+
+\section{Ultra-produtos}
+
+Primeiramente definiremos o que é um filtro sobre um conjunto $X$ qualquer:
+
+\begin{mydef}
+	
+	Um filtro num conjunto $X$ é um subconjunto $F$ de $\wp (X)$ que possui as seguintes propriedades: \\
+	
+	i) se $A,B\in F$ então $A\cap B\in F$,
+	
+	ii) Se $A\in F$ e $A\subset B$ então $B\in F$,
+	
+	iii) $\emptyset \notin F$.
+	
+\end{mydef}
+
+Um conjunto que satisfaz apenas (i) e (iii) é chamado de base para filtro, pois podemos gerar um filtro com tal conjunto como sendo a intersecção de todos que o contém. Se um filtro for maximal, ou seja, não está contido em qualquer filtro que não seja ele mesmo, dizemos que ele é um ultra-filtro. 
+
+\begin{prop}
+	
+	O conjunto $\bf{u}\subset \wp(X)$ é um ultra-filtro se, e somente se, $A\in \bf{u}$ ou $X\setminus A \in \bf{u}$ pra todo $A\subset X$ não vazio.
+	
+\end{prop}
+
+\dem Suponha que o filtro $\bf{u}$ é subconjunto próprio de outro filtro $F$ e assuma que $A\in \bf{u}$ ou $X\setminus A \in \bf{u}$ pra todo $A\subset X$ não vazio, então existe$B \subset X$ não vazio tal que $B\in F$ e $X\setminus B\in G$, logo $\emptyset =B\cap (X\setminus B)\in G$, absurdo. Agora suponha que $\bf{u}$ é um filtro que não é subconjunto próprio de outro filtro e que existe $A\subset X$ não vazio tal que $A\notin \bf{u}$ e $X\setminus A \notin F$, com isso podemos definir um filtro gerado por $A$ e fazer uma união ele com $\bf{u}$ e ``fechar'' o conjunto resultante para que ele seja um filtro, porém isso resultaria num filtro que contém $\bf{u}$ diferente dele, o que contraria sua maximalidade. \eop
+
+\begin{prop}
+	
+	Todo filtro está contido num ultra-filtro. 
+	
+\end{prop}
+
+\dem Esta demonstração consiste em outra aplicação padrão do Lema de Zorn: Seja $F\subset \wp (X)$ um filtro e seja $A$ o conjunto de todos os filtros contendo $F$ parcialmente ordenado pela inclusão. Seja $K$ uma cadeira em $Z$, defina $K^*=\bigcup K$, tal conjunto é um filtro: \\
+
+i) se $A,B\in K^*$ então existem $F_1$ e $F_2$ filtros em $K$ tais que $A\in F_1$ e $B\in F_2$, assuma, sem perda de generalidade, que $F_1\subset F_2$, então $A,B\in F_2$, logo $A\cap B\in F_2$, portanto $A\cap B\in F_K^*$. \\
+
+ii) Suponha que  $A\in K^*$ e $A\subset B$, então $A\in F_1$ para algum filtro $F_1$ em $K$, então $B\in F_1$, portanto $B\in K^*$. \\
+
+iii) Se $\emptyset \in K^*$ então $\emptyset \in F_1$ para algum filtro $F_1$ em $K$, absurdo. \\
+
+Aplicando o Lema, temos que $A$ possui um elemento maximal, que será o ultra-filtro desejado. \eop
+
+Agora definiremos o conceito de ultra-produto de modelos. Seja $\Lambda$ um conjunto de índices arbitrário e $\bf{u}\subset \wp(\Lambda)$ um ultra-filtro. Sejam $L$ uma linguagem e $\{ \mathfrak{M}_i\}_{i\in \Lambda} $ uma família de estruturas compatíveis com universos $\{ M_i\}_{i\in \Lambda} $ não vazios e interpretações $\{ \llbracket \cdot \rrbracket_i \}_{i\in \Lambda} $ sobre $\{0,1\}$; o ultra-produto de $\{ \mathfrak{M}_i\}_{i\in \Lambda} $ pelo filtro $\bf{u}$ , simbolizado por $\prod\mathfrak{M}_i /\bf{u} $, será a estrutura formada primeiramente pelo universo $\prod M_i /\bf{u} $ das seguintes classes de equivalência em $\prod M_i $: dizemos que as $\Lambda$-uplas $(..., a_i , ...)$ e $(..., b_i , ...)$ são equivalentes se, e somente se, $\{i:a_i = b_i \}\in \bf{u}$ (a verificação de que esta relação de fato é de equivalência é imediata). Frequentemente abusaremos da notação identificando um representante de classe com a própria classe. Além disso os nomes para os termos são definidos de maneira natural: constantes são dadas conforme anteriormente e se $f$ é uma função de aridade n e $t_1=(..., t_{1_i},..),...,t_n=(..., t_{n_i},..)$ representantes de classes para nomes, $f_{t_1,...,t_n}$ será o nome mandado pra a classe de $(...,f_{t_{1_i},...,t_{n_i}},...)$. Agora é preciso definir como são feitas as interpretações neste modelo: $ \llbracket (... ,\mathscr{A}_i,...) \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$ sendo $\mathscr{A}_i$ da forma $P_{t_{1_1},...,t_{n_i}}$ para algum predicado $P$.  Segue agora um resultado importantíssimo conhecido como Teorema de Łoś que justifica a toda esta construção:
+
+\begin{mthrm}
+	
+	Seja $\mathscr{A}$ uma fórmula fechada em $\textrm{\textbf{Fbf}}(\prod \mathfrak{M}_i/\bf{u})$ então $ \llbracket \mathscr{A} \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$.
+	
+\end{mthrm}
+
+\dem Para o caso atômico o teorema é verdadeiro por definição, restando fazer uma indução na complexidade de $\mathscr{A}$ mostrando a validade para $\neg$, $\vee$ e $\exists$. Primeiro consideramos uma fórmula da forma $\neg \mathscr{A}$, pela hipótese de indução, $ \llbracket \mathscr{A} \rrbracket=1$ se e somente se $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}\in \bf{u}$, logo $\{i: \llbracket \neg \mathscr{A}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i=0\}$ é o complementar de  $\{i: \llbracket \mathscr{A}_i \rrbracket_i=1\}$, portanto não está em  $\bf{u}$, logo $ \llbracket \neg \mathscr{A} \rrbracket=0$, o outro lado da equivalência se deduz pela mesma razão. Supondo a hipótese de indução para $ \mathscr{A}$ e $ \mathscr{B}$, pra provar que a propriedade vale para $\mathscr{A} \vee \mathscr{B}$ basta notar que: $$\{i: \llbracket \mathscr{A}_i \vee \mathscr{B}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i + \llbracket \mathscr{B}_i \rrbracket_i=1\}=\{i: \llbracket \mathscr{A}_i \rrbracket_i =1\} \cup  \{ i: \llbracket \mathscr{B}_i \rrbracket_i=1\}.$$ Para mostrar a propriedade para $(\exists x)\mathscr{A}$ supomos que ela vale para $\mathscr{A}[y]$ para $y$ qualquer e notamos que: $$\{i: \llbracket (\exists x)\mathscr{A}_i \rrbracket_i=1\}= \{i:\sup \{ \llbracket \mathscr{A}_i[y_i] \rrbracket_i:y_i\in M_i\}=1\}=$$ $$=\bigcup_{y_i\in M_i} \{i: \llbracket \mathscr{A}_i[y_i] \rrbracket_i=1\},$$ Aplicando a hipótese de indução temos que isto equivale a $\sup \{ \llbracket \mathscr{A}[y] \rrbracket_i:y\in \prod M_i\}=1$, ou seja, $ \llbracket (\exists x)\mathscr{A}  \rrbracket = 1$. \eop
+
+Caso cada um dos modelos $\mathfrak{M}_i$ sejam iguais, dizemos que esta construção fornece um ultra-modelo (ou ultra-potência do modelo) pelo ultra-filtro $\bf{u}$; tal construção pode ser ainda generalizada pra uma álgebra booleana qualquer $B$ no lugar de $\wp(\Lambda)$, mas não entraremos em detalhes sobre como construir este tipo de ultra-modelo. Existem ainda várias aplicações importantes para esta teoria, a principal delas é na construção de modelos ``nonstandards'', pois existe um teorema que garante um ``princípio de transferência'' em que teoremas na teoria original ainda são válidos na nova versão. O mais conhecido dos exemplos é o da análise nonstandard, que cria um modelo para os números reais e inclui infinitos e infinitesimais (perdendo, por exemplo, a propriedade arquimediana). 
+
+\section{A topologia e os resultados}
+
+Consideraremos agora o conjunto $\mathcal{T}$ de todas as teorias $T$ sobre a linguagem $L$ que são simplesmente completas e construiremos uma topologia em tal família: para cada sentença $\mathscr{A}$ definimos $\langle \mathscr{A} \rangle$ como o conjunto das teorias completas que contém $\mathscr{A}$, tais conjuntos serão a base para a topologia em $\mathcal{T}$. Primeiro notamos que este espaço é Hausdorff, uma vez que, se as teorias são completas, duas teorias $T$ e $T'$ distintas terão pelo menos uma sentença $\mathscr{A}$ tal que $T\vdash \mathscr{A}$ e $T'\vdash\neg \mathscr{A}$, assim $\langle \mathscr{A} \rangle$ e $\langle\neg \mathscr{A} \rangle$ são vizinhanças abertas disjuntas de $T$ e $T'$ respectivamente. Notamos também que $\langle \mathscr{A} \rangle$ e $\langle\neg \mathscr{A} \rangle$ são complementares, logo a base da topologia é formada por conjuntos abertos e fechados (``clopen''), ou seja, é $0$-dimensional, donde concluímos também que todo subconjunto conexo de $\mathcal{T}$ é unitário ou o vazio. Por fim, concluímos que intersecções de elementos da base correspondem a teorias incompletas que são axiomatizadas por estas fórmulas(par que fique claro, estamos considerando uma correspondência, não uma igualdade). Com isso, segue o teorema de compacidade para linguagens de primeira ordem: 
+
+\begin{mthrm}
+	
+	$\mathcal{T}$ é compacto. 
+	
+\end{mthrm}
+
+\dem Basta mostrar que todo ultra-filtro em $\mathcal{T}$ converge. Dada uma teoria completa $T$ seja $\mathfrak{M}_T$ um modelo para ela, seja $T_0$ a teoria do modelo $\prod_{T\in \mathcal{T}} \mathfrak{M}_T/\bf{u}$, para algum ultra-filtro arbitrário $\bf{u}$. Se $A$ é uma vizinhança de $T_0$, logo ela contém um aberto básico $\langle \mathscr{A} \rangle$ tal que $T_0\vdash \mathscr{A}$ e, pelo Teorema de Łoś, $\{T: \ \vDash_{ \mathfrak{M}_T}  \mathscr{A} \}=\langle \mathscr{A} \rangle \in \bf{u}$ da mesma forma que $A\in \bf{u}$, portanto tal ultra-filtro converge. \eop
+
+
+Uma outra forma de ver este resultado é a seguinte:
+
+\begin{mthrm}
+	
+	Para que um conjunto $A$ de sentenças seja consistente, basta que todo subconjunto finito seja. 
+	
+\end{mthrm}
+
+\dem Seja $I$ o conjunto de subconjuntos finitos de $A$, logo, para $i\in I$, pelo teorema da consistência, temos modelos $\mathfrak{M}_i$, além disso o conjunto $I_i = \{ j: j\in I,i\subset j \}$ é uma base de filtro, o qual terá um ultra-filtro $\bf{u}$ e, por isso, temos que $\prod \mathfrak{M}_i/\bf{u}$ é um modelo para $A$ e, por soundness, A é consistente. \eop
+
+Desta forma provamos também o Teorema da Completude:
+
+\begin{cor}
+	
+	Se $\Gamma \vDash \mathscr{A}$ então $\Gamma \vdash \mathscr{A}$.
+	
+\end{cor} 
+
+\dem Primeiro lembramos que, se $\mathscr{A}$ não é uma sentença, podemos tomar seu fecho universal, ou seja, em cada variável livre $x$ adicionamos à fórmula $\forall x$. O fato de podemos fazer isso segue do seguinte: $T\vdash \mathscr{A}$ se, e somente se, $T\vdash (\forall x)\mathscr{A}$, ou seja, no caso de $\mathscr{A}$ não ser uma sentença, esta fórmula está em toda teoria que contém seu fecho universal, com isso podemos seguir com a prova assumindo, sem perda de generalidade, que $\mathscr{A}$ é uma sentença. 
+
+Se $\Gamma$ não prova $\mathscr{A}$ então  $\Gamma$ não está contido em $ \langle \mathscr{A} \rangle$, logo está contido em seu complementar (caso não esteja, está contido numa teoria completa que está) $ \langle \neg \mathscr{A} \rangle$, portanto existe um modelo para $\Gamma +\neg \mathscr{A}$ que obviamente não satisfará $\mathscr{A}$. \eop
+
+Por fim mostraremos a versão ``Upward'' do Teorema de Löwenheim-Skolem (consideraremos, neste caso, uma teoria com igualdade):
+
+
+\begin{cor}
+	
+	Seja $T$ uma teoria sobre uma linguagem $L$ infinita que possui um modelo, então $T$ possui um modelo cuja cardinalidade é maior ou igual a qualquer cardinal $\kappa$ tal que $|L|\leq \kappa $.
+	
+\end{cor}
+
+\dem Se $\mathfrak{M}$ é o modelo infinito de $T$ na linguagem $L$, definimos $L'$ adicionando $\kappa$ novos símbolos constantes $c_i$ e $T'$ a teoria $T$ adicionando $c_i\neq c_j$ para $i\neq j$, logo tal teoria possui um modelo $\mathfrak{M}'$, já que é consistente, uma vez que qualquer subconjunto finito $T'$ será, assim consideramos a restrição do modelo $\mathfrak{M}'$ à linguagem original $L$, ou seja, ignorando os novos símbolos constantes. Com isso temos que a cardinalidade deste modelo para a teoria $T$ é no mínimo $\kappa$ pela construção de Henkin. \eop
+
+\section{Bibliografia}
+
+\ \\
+
+
+[1] Dalen, D. Van.\textit{ Logic and Structure}. Fifith ed. Berlin: Springer-Verlag, 2013. Print. Universitext. \\
+
+[2] Poizat, Bruno. \textit{A Course in Model Theory: An Introduction to Contemporary Mathematical Logic}. New York: Springer, 2000. Print. \\
+
+[3] Shoenfield, Joseph R. \textit{Mathematical Logic}. Reading, MA: Addison-Wesley Pub., 1967. Print. \\
+
+[4] Takeuti, Gaisi, and Wilson M. Zaring. \textit{Axiomatic Set Theory}. New York: Springer-Verlag, 1973. Print. Graduate Text in Mathematics 8. \\
+
+[5] Tourlakis, George J. \textit{Lectures in Logic and Set Theory}. Vol. 1. Cambridge, UK: Cambridge UP, 2003. Print. \\
+
+
+\ \\
+
+\ \\
+
+\ \\
+
+
+{\Large  \textbf{Segunda apresentação:} Ultra-produtos na construção de modelos nonstandard.}
+
+\ \\
+
+{\Large \textbf{Resumo}}  \\
+
+
+{\small A segunda parte deste trabalho consiste em estudar uma classe especial de modelos construídos por ultra-produtos sobre os quais valerá o Princípio da Transferência. Veremos que tais construções são capazes de expandir um determinado modelo num maior que contém uma ``cópia'' do primeiro. Isto possibilita o estudo dos mais variados temas, em especial, trataremos sobre as bases da formalização do cálculo infinitesimal e propriedades sobre espaços de ultra-filtros.}
+
+\section{O princípio da transferência e modelos nonstandard}
+
+O Teorema de Łoś (\textbf{3.4}) também pode ser entendido da seguinte maneira: Seja $\mathfrak{M}$ um modelo e $\bf{u}$ um ultra-filtro não-principal (ou seja, um ultra-filtro que não contém um conjunto finito) em $\omega$, tomamos, assim, o ultra-produto $\prod_{i\in \omega} \mathfrak{M} / \bf{u}$. Seja $\mathscr{A}$ uma fórmula na linguagem de $\mathfrak{M}$, podemos associar a ela um representante de classe $^*\mathscr{A}$ na linguagem de $\prod_{i\in \omega} \mathfrak{M} / \bf{u}$ (que, a partir de agora, chamaremos apenas de $^*\mathfrak{M}$) em que $\mathscr{A}_i=\mathscr{A}$ se, e somente se, $i\in \bf{u}$, com isso, podemos enunciar o Princípio da Transferência: 
+
+\begin{mthrm}
+	
+	Seja $\mathfrak{M}$ um modelo e $\mathscr{A}$ uma fórmula em sua linguagem, então $$ \llbracket\mathscr{A}  \rrbracket = 1 \text{ se, e somente se, }  \llbracket ^*\mathscr{A}  \rrbracket = 1.$$
+	
+\end{mthrm}
+
+\dem Imediata, bastando aplicar as definições e \textbf{3.4}. \eop
+
+Isso significa que fórmulas continuam valendo quando transferidas de um modelo para o outro. Tal resultado pode dar a impressão de que ir de $\mathfrak{M}$ para $^*\mathfrak{M}$ seria desnecessário ou redundante, ao menos levando em conta o ponto de vista sintático de uma teoria. Porém, vale notar que o universo da teoria ``cresce'' nesse processo e isso ficará claro quando começarmos a explorar os exemplos. 
+
+Outro ponto importante é o fato de $\bf{u}$ ser não-principal. Caso ele fosse principal, isso significaria que elementos do produto seriam equivalentes se coincidissem num conjunto finito de índices, fazendo com que a construção gerasse um novo modelo, de certa forma, isomorfo ao primeiro. Com relação à unicidade de $^*\mathfrak{M}$, isso depende, basicamente, de $\bf{u}$ e de resultados que estão além das nossas possibilidades, uma vez que depende da Hipótese do Contínuo. Assim, para os efeitos do que será feito, apenas iremos supor que a escolha deste ultra-filtro é fixa na nossa construção.      
+
+O primeiro exemplo que trataremos será o do modelo padrão dos números reais $\mathfrak{R}$, ou seja, aquele que possui o universo $\mathbb{R}$ com suas operações usuais e que satisfaz os axiomas de corpo ordenado e também possui a propriedade de ser Dedekind-completo. Antes mesmo de estudar $^*\mathfrak{R}$, pode surgir a seguinte dúvida: ora, $\mathfrak{R}$ não é único a menos de isomorfismo? Como seria possível construir, a partir dele, um modelo que satisfaz os mesmos axiomas e é não-isomorfo? A resposta para isso é bem sutil: $\mathfrak{R}$, como modelo, satisfaz axiomas escritos numa linguagem de primeira ordem, sendo que o axioma do supremo (que dá a propriedade do corpo ser Dedekind-completo) não é possível de ser expressado neste contexto (para isso seria necessária uma linguagem de ordem superior), ou seja, considera-se somente os axiomas de corpo ordenado. 
+
+Com o resultado \textbf{5.1} já concluímos que $^*\mathfrak{R}$, que chamaremos de modelo dos números hiper-reais, de certa forma, estende $\mathfrak{R}$, afinal, sabemos que existe uma cópia de $\mathbb{R}$ em $^*\mathbb{R}$, bastando tomar a correspondência $a\in \mathbb{R}\mapsto {^*a}\in {^*\mathbb{R}}$, bem como as operações correspondentes de soma e produto, além de outras funções que podemos eventualmente definir, como a exponencial, o logaritmo, as trigonométricas, etc. Devemos verificar que ${^*\mathbb{R}}$ possui, de fato, novos elementos:
+
+\begin{prop}
+	
+	Existe um elemento $\varepsilon \in {^*\mathbb{R}}$ tal que $\varepsilon > {^*0}$, porém, para todo $r\in \mathbb{R}$ tal que $r>0$, temos que $\varepsilon < {^*r}$. Além disso, também existe um elemento $a\in {^*\mathbb{R}}$ tal que, dado $r\in \mathbb{R}$, temos que $^*r<a$.  
+	
+	
+\end{prop}
+
+
+
+\textbf{\textit{Observação:}} para que a notação fique menos carregada, omitimos (e omitiremos) o $^*$ de algumas funções e predicados.
+
+
+\dem Tome $\varepsilon = (1,1/2,...,1/i,...)$ (lembrando que isso é um abuso de notação, ou seja, $\varepsilon$ não é igual a esta $\omega$-upla, e sim à sua classe de equivalência, sendo $(1,1/2,...,1/i,...)$ um representante desta classe), com isso temos que $\varepsilon_i > 0$ para todo $i\in \omega\in \bf{u}$, logo $\varepsilon > {^*0}$. Além disso, dado $r\in \mathbb{R}$ tal que $r>0$ temos que $\{i: \varepsilon_i=1/i < r\}\in \bf{u}$, pois é cofinito, ou seja,  $\varepsilon < {^*r}$. Agora tomamos $a=(1,2,3,...,n,...)$ e, analogamente, temos que  $\{i: a_i=i > r\}\in \bf{u}$, ou seja, $^*r<a$. \eop
+
+Diremos que elementos de ${^*\mathbb{R}}$ com tais propriedades são números infinitesimais e infinitos respectivamente. Uma observação interessante é de que, conforme definidos, $a {^*\cdot} \varepsilon = {^*1}$. Uma propriedade importante nos números hiper-reais é o fato que todo elemento finito $a\in {^*\mathbb{R}}$ está "infinitamente próximo" de um único número $^*r$ tal que $r\in \mathbb{R}$, ou seja, a diferença entre eles é um número infinitesimal, isso é verificado da seguinte maneira: basta tomar $^*r=\sup \{ x\in \mathbb{R}: {^*x} < a \}$, tal supremo existe, pois o conjunto em questão é limitado superiormente, afinal, o número híper-real não é infinito, a verificação de que ele é único e sua diferença é um infinitesimal é automática, com isso definimos este número como sendo a \textit{parte standard} de $a$, simbolizando por $\text{st}(a)$. Tal função tem propriedades necessárias para que seja possível utilizar números hiper-reais para fazer cálculo, a saber: 
+
+\begin{prop}
+	
+	Se $a$ e $b$ são hiper-reais finitos e $n\in\mathbb{N}$ então: \\
+	
+	1) $\text{st}(a\pm b)=\text{st}(a)\pm\text{st}(a) $; \\
+	
+	2) $\text{st}(ab)=\text{st}(a)\text{st}(a)$; \\
+	
+	3) $\text{st}(a/b)=\text{st}(a)/\text{st}(b)$ se $\text{st}(b)\neq 0$;\\
+	
+	4) $\text{st}(|a|)=|\text{st}(a)|$;\\
+	
+	5) $\text{st}(a^{\frac{1}{n}})=\text{st}(a)^{\frac{1}{n}}$ se $b\geq 0$;\\
+	
+	6) se $a\leq b$ então $\text{st}(a) \leq \text{st}(b)$.	
+	
+\end{prop}
+
+
+
+\dem A demonstração destas propriedades são simples e podem ser encontradas nas referências sobre o tema. \eop
+
+Com isso é possível definir a derivada de uma função $f:A\rightarrow \mathbb{R}$ num ponto interior $a \in A\subset\mathbb{R}$ sem precisar definir um conceito de limite na reta da seguinte maneira: Se, para todo infinitesimal $\varepsilon$, $$\text{st}\left(\frac{{^*f}({^*a}+\varepsilon)-{^*f}({^*a})}{\varepsilon}\right)$$ existe e possui o mesmo valor, então dizemos que tal valor é $f'(a)$. Em geral, o procedimento para o cálculo destas derivadas será praticamente o mesmo que aquilo feito na forma padrão, por exemplo, se a função for $f(x)=x^2$ para $x\in \mathbb{R}$ teremos que ${^*f(x)=x^2}$ para $x\in {^* \mathbb{R}}$, com isso observamos que $$\frac{({^*x}+\varepsilon)^2 - {^*x} ^2}{\varepsilon}=\frac{{^*x}^2+2\varepsilon{^*x} +\varepsilon^2 -{^*x}^2}{\varepsilon}=\frac{2\varepsilon{^*x} +\varepsilon^2 }{\varepsilon}=2{^*x}+\varepsilon$$ cuja parte standard é $2x$, uma vez que $\text{st}(\varepsilon)=0$, isto mostra que $f'(x)=2x$.
+
+Uma definição diferente de limite também pode ser dada neste contexto: dada uma função $f:A\rightarrow \mathbb{R}$ e um ponto de acumulação $a$ de $A\subset \mathbb{R}$ dizemos que o limite de $f(x)$ quando $x\rightarrow a$ é igual a $L\in \mathbb{R}$ se, e somente se, $\text{st}({^*f}(\gamma))=L$ para todo $\gamma\in{^*\mathbb{R}}$ tal que $\text{st}(\gamma)=a$. A definição de continuidade é a mesma do limite para o caso de $a$ estar no domínio e $L=f(a)$. Usando esta definição e \textbf{5.3} podemos mostrar de forma imediata propriedades sobre limite e continuidade como o fato da soma de um limite ser o limite da soma e assim por diante.    
+
+
+Números infinitesimais traduzem formalmente a ideia de mesmo nome que se usava no cálculo antes na formulação atual com ``$\varepsilon -\delta$'', isso traz várias vantagens do ponto de vista didático em que muitas definições ficam mais intuitivas, inclusive existe um livro completo de cálculo elementar escrito nessa linguagem(referência [4]).    
+
+O próximo exemplo a ser estudado será $^*\mathbb{N}$ e iniciaremos com a seguinte:
+
+
+\begin{prop}
+	
+	Seja $\alpha \in {^*X}$  e $ \bf{u}_\alpha$ $=\{A\subset X : \alpha\in {^*A} \} $, tal conjunto é um ultra-filtro, além disso definimos a relação $\sim_{u}$ em elementos de ${^*X}$ em que $\alpha \sim_{u} \beta$ se, e somente se, $\bf{u}_\alpha=\bf{u}_\beta $, que é de equivalência. 
+	
+\end{prop}  
+
+\dem As propriedades de filtro (\textbf{3.1}) claramente são satisfeitas, uma vez que $^*\emptyset = \emptyset$ e as outras são imediatas da definição, resta mostrar que o critério de \textbf{3.2} é satisfeito, o qual também acaba sendo imediato, já que $^*(X\setminus A)={^*X}\setminus{^*A}$ (pelo Princípio da Transferência) e, com isso, ${^*X}=({^*X}\setminus{^*A}) \cup {^*A}$ é uma união disjunta, logo $\alpha$ está em um deles. A verificação de que $\sim_{u}$ é de equivalência também é imediata. \eop
+
+
+
+Com isso podemos definir a função $\mathfrak{U}: {^*X}\rightarrow \beta X$ tal que $\mathfrak{U}(\alpha)=\bf{u}_\alpha$ em que $\beta X$ é o conjunto de ultra-filtros de $X$. Definimos também a topologia Standard num conjunto $^*X$ como sendo a gerada pelos abertos básicos da forma $\{ {^*A}:A\subset X \}$. Com isso estabelecemos a primeira relação entre $^*X$ e $\beta X$:
+
+\begin{prop}
+	
+	Temos que $\mathfrak{U}: {^*X}\rightarrow \beta X$ é sobrejetora se, e somente se, a topologia Standard em $^*X$ é compacta. Além disso, observamos que, nestas condições $\beta X$ e ${^*X}/ \sim_{\bf{u} }$ estão em bijeção.
+	
+\end{prop}
+
+\dem Para isso, utilizaremos uma caracterização alternativa de compacidade: iremos mostrar que, se a função definida é sobrejetora, então dada uma família de fechados em ${^*X}$ com a propriedade de intersecção finita, ela possui intersecção não vazia. Pela definição de topologia Standard, podemos assumir que os elementos desta família $^*\mathcal{C}$ de fechados são da forma $^*C_i$ com $C_i\subset X$, $i\in I$; com isso, temos que, pelo Princípio da Transferência,  $^*\mathcal{C}$ tem propriedade da intersecção finita se, e somente se,  $\mathcal{C}$, com elementos $C_i$, também possui, com isso estendemos $\mathcal{C}$ para um ultra-filtro $\bf{c}$, já que conjuntos com a propriedade de intersecção finita podem ser estendidas para bases de filtros. 
+
+Por hipótese, existe $\alpha \in  {^*X}$ tal que $\mathfrak{U}(\alpha)=\bf{c}$, portanto $\alpha\in \bigcap_{i\in I} {^*C_i}\neq \emptyset$, portanto ${^*X}$ é compacto. Temos também que a classe de equivalência de $\alpha$ pela relação $\sim_{\bf{u} }$ é $\bigcap \{{^*A}: A\in \mathfrak{U}(\alpha)=\bf{c} \}$ e, nessa hipótese, temos que $\beta X = \{ \mathfrak{U}(\gamma):\gamma \in {^*X}  \}$, donde segue que $\beta X$ e ${^*X}/ \sim_{\bf{u} }$ estão em bijeção. 
+
+Reciprocamente, se a topologia Standard em ${^*X}$ é compacta, temos que $\bigcap \{{^*A}: A\in \bf{u} \}$ é não vazio para um ultra-filtro $\bf{u} $ em $X$, logo tomamos um elemento $\alpha$ nesta intersecção e, assim, temos que $\mathfrak{U}(\alpha)=\bf{u}$, logo a função é sobrejetora. \eop 
+
+Temos também que vale o seguinte: 
+
+\begin{prop}
+	
+	A topologia Standard em $^*X$ é Hausforff se, e somente se, $\mathfrak{U}: {^*X}\rightarrow \beta X$ é injetora.
+	
+\end{prop}
+
+\dem A topologia Standard em $^*X$ é Hausforff se, e somente se, para dois elementos $\alpha$ e $\gamma$ de $^*X$ existem subconjuntos disjuntos $^*A$ e $^*B$ de $^*X$ tais que  $\alpha\in {^*A}$ e $\gamma \in {^*B}$, o que é equivalente a $A\in \mathfrak{U}(\alpha)$ e $B\in \mathfrak{U}(\gamma)$ com $A$ e $B$ disjuntos, sendo que isso ocorre se, e somente se, os ultra-filtros $\mathfrak{U}(\alpha)$ e $\mathfrak{U}(\gamma)$ são diferentes. \eop
+
+Apesar de temos condições para que um espaço com a topologia Standard seja Hausdorff ou compacto a partir da função $\mathfrak{U}$, temos o seguinte: 
+
+\begin{thrm}
+	
+	O conjunto $^*\mathbb{N}$ com a topologia Standard não pode ser Hausdorff e compacto. 
+	
+\end{thrm}
+
+
+\dem Basta mostrar que, se a função $\mathfrak{U}: {^*\mathbb{N}}\rightarrow \beta \mathbb{N}$ é sobrejetora, então, para todo ultrafiltro $\bf{u}\in \beta \mathbb{N}$, $\mathfrak{U}^{-1}(\bf{u})$ tem mais de um elemento. Mostraremos mais que isso: este conjunto tem infinitos elementos. 
+
+Seja $\wp_{fin} (\mathbb{N})$ o conjunto dos subconjuntos finitos de $\mathbb{N}$, $\bf{u}$ um ultra-filtro em $\mathbb{N}$ não principal, $X\in \bf{u}$ e $k\in \omega$, com isso definimos o conjunto $$\Lambda (X,k)=\{ F\in \wp_{fin} (\mathbb{N}) : F\subset X \wedge |F|\geq k  \}.$$ Com isso podemos notar que a família $\mathcal{F}=\{ \Lambda (X,k): X\in \bf{u}$ $,k\in\omega  \}$ tem a propriedade da intersecção finita, pois $\Lambda (X_1,k_1) \cap ... \cap \Lambda (X_n,k_n)=\Lambda (X_1\cap ... \cap X_n,\max \{ k_1,...,k_n \})$, sendo que $\Lambda (X,k)$ é sempre não vazio uma vez que $\bf{u}$ é não principal. 
+
+Seja $\Psi :\wp_{fin} (\mathbb{N}) \rightarrow \mathbb{N}$ uma bijeção e $$\Gamma (X,k)= \{ \Psi (F): F\in \Lambda (X,k)\}.$$ Com isso, a família $\{ \Gamma (X,k): X\in \bf{u}$ $,k\in\omega  \}\subset \wp(\mathbb{N})$ possui a propriedade da intersecção finita e pode ser estendida para um ultra-filtro $\bf{v}$. Por hipótese, existe $\gamma \in {^*\mathbb{N}}$ tal que $\mathfrak{U}(\gamma)=\bf{v}$, em particular, $\gamma \in \bigcap _{X,k} {^* \Gamma (X,k)}$, com isso temos que $\gamma = {^*(\Psi (G))}$ para uma escolha adequada de $G\in \bigcap _{X,k} {^* \Lambda (X,k)}$. Com isso temos que $G\subset {^* X}$ para todo $X\in \bf{u}$, logo $\mathfrak{U}(\alpha)=\bf{u}$ para todo $\alpha \in G$, além disso, $|G|\geq k$ para todo $k\in \omega$ por estar naquela intersecção, ou seja, $G$ é infinito e está contido na imagem inversa de $\bf{u}$ por $\mathfrak{U}$. \eop
+
+
+Poderíamos mostrar até mais do que isso: qualquer conjunto infinito e interno\footnote{um objeto $a$ interno num modelo nonstandard $^* \mathfrak{M}$ é tal que $a\in {^* b}$ e $b\in \mathfrak{M}$.} necessariamente terá ao menos a cardinalidade do contínuo. 
+
+Iremos expor, sem entrar em muitos detalhes, duas maneiras de demonstrar este fato. O primeiro utiliza as propriedades mais ``concretas'' da análise nonstandard e segue o roteiro  apresentado em [9], em que se afirma que, se um conjunto $G$ é interno, então ou existe uma função injetora $f:{^*\mathbb{N}}\rightarrow G$ ou $f:\{ 0,1,...,\nu \}\rightarrow G$ bijetora. No primeiro caso, o resultado segue trivialmente, afinal, por hipótese, $^*\mathbb{N}$ está em sobrejeção com o conjunto de ultra-filtros em $\mathbb{N}$. Consideremos o outro caso. Ora, $\nu \in {^* \mathbb{N}}$ é infinito, pois, caso contrário, $G$ seria finito. Agora considere o intervalo real $[0,1]$ e defina $g:[0,1]\rightarrow \{ 0,1,...,\nu \}$ em que $g(x)=\min \{ 1\leq i \leq \nu : x\leq i/\nu \}$, tal mapa é uma injeção, pois, se $g(x)=g(y)$, então $|x-y|\leq 1/\nu \sim 0$, logo $x=y$. Com isso concluímos que $\mathfrak{c}=|[0,1]|\leq |\{ 0,1,...,\nu \}| = |G|$, como queríamos. 
+
+A segunda demonstração leva em conta a própria construção do modelo e, com ela, podemos demonstrar este fato de forma bem generalizada, ou seja, sem supor que existe uma estrutura como $^*\mathbb{N}$ e $^*\mathbb{R}$. Seguindo o roteiro apresentado em [1] em \textbf{4.4.20}, como $G$ é interno, ele é tal que $G={^* B}$ em que $B\subset\mathbb{N}$, com isso, sendo $\bf{u}$ o ultra-filtro usado na construção do modelo nonstandard, temos que $G \simeq \prod B/\bf{u}$, assim, basta analisar a cardinalidade deste conjunto. O problema é que, neste nível de generalidade, é preciso fazer mais exigências sobre $\bf{u}$, podemos ver para o caso do ultra-filtro ser $\omega$-regular \footnote{Ou seja, se existe um subconjunto $E$ de $\bf{u}$ infinito enumerável e cada $i\in \omega$ pertence somente a uma quantidade finita de $X\in E$.} em \textbf{4.3.9} de [1] que esta cardinalidade é ao menos $\mathfrak{c}$, uma vez que tal resultado diz que $ \left|\prod B/\bf{u}\right|^\omega = \left|\prod B/\bf{u}\right|$ se  $\bf{u}$ é $\omega$-regular e $B$ infinito. Por fim, para concluir, observamos que em \textbf{4.3.5} de [1] é feita a construção de ultra-filtros com as características desejadas (em que os do tipo $\omega$-regulares são um caso particular). 
+
+\section{Bibliografia}
+
+\ \\
+
+
+[1] Chang, Chen Chung, and H. Keisler Jerome. \textit{Model Theory.} Amsterdam: North-Holland Pub., 1973. Print. \\
+
+[2] Dalen, D. Van.\textit{ Logic and Structure}. Fifith ed. Berlin: Springer-Verlag, 2013. Print. Universitext. \\
+
+[3] Kanovei, V. G., and Michael Reeken. \textit{Nonstandard Analysis, Axiomatically.} Berlin: Springer, 2004. Print. \\
+
+[4] Keisler, H. Jerome. \textit{Elementary Calculus: An Infinitesimal Approach.} Boston, MA: Prindle, Weber \& Schmidt, 1986. Print. \\
+
+[5] Loeb, Peter A., and Manfred Wolff P. H. \textit{Nonstandard Analysis for the Working Mathematician.} Second ed. Dordrecht: Kluwer Academic, 2015. Print. \\
+
+[6] Poizat, Bruno. \textit{A Course in Model Theory: An Introduction to Contemporary Mathematical Logic}. New York: Springer, 2000. Print. \\
+
+[7] Shoenfield, Joseph R. \textit{Mathematical Logic}. Reading, MA: Addison-Wesley Pub., 1967. Print. \\
+
+[8] Takeuti, Gaisi, and Wilson M. Zaring. \textit{Axiomatic Set Theory}. New York: Springer-Verlag, 1973. Print. Graduate Text in Mathematics 8. \\
+
+[9] Tourlakis, George J. \textit{Lectures in Logic and Set Theory}. Vol. 1. Cambridge, UK: Cambridge UP, 2003. Print. \\
+
+[10] Vath, Martin. \textit{Nonstandard Analysis.} Basel: Birkhauser, 2007. Print.
+
+
+
+\ \\
+
+\ \\
+
+\ \\
+
+
+{\Large  \textbf{Terceira apresentação:} Definibilidade e o universo $L$.}
+
+\ \\
+
+{\Large \textbf{Resumo}}  \\
+
+
+{\small A terceira parte deste trabalho consiste em estudar a definibilidade, começando pela lógica matemática e teoria de modelos. Em seguida, vemos como ela se dá no contexto da teoria dos conjuntos para definir o universo construtível $L$. Por fim, enunciaremos as propriedades deste universo e citaremos algumas aplicações que o utilizam.}
+
+\section{Definibilidade}
+
+Primeiramente, daremos a definição de conjunto definível no contexto mais geral da teoria de modelos:
+
+\begin{mydef}
+    
+    Dada a estrutura $\mathfrak{M}$ com universo $M$ compatível com uma linguagem de primeira ordem, um conjunto $S$ é definível em $\mathfrak{M}$ se, para alguma fórmula $\mathscr{A}$ da linguagem em questão,  existe $a_1,...,a_n\in M$\footnote{Neste caso dizemos que a definibilidade é com parâmetros; apesar de precisarmos deles para tratar sobre o universo $L$, em muitos contextos não há necessidades de inclui-los na definição.} tal que $$x\in S \text{ se, e somente se, } \vDash_{\mathfrak{M}} \mathscr{A}(x,a_1,...,a_n).$$
+    
+\end{mydef}
+
+O primeiro aspecto importante desta definição não é sobre o que é definível, mas sobre o que não é definível: um dos resultados mais importantes da lógica matemática se dá justamente em torno da indefinibilidade. 
+
+Seja $\ulcorner \cdot \urcorner : \textbf{Fbf}\rightarrow \mathbb{N}$ uma função injetora, a qual chamaremos de enumeração de Gödel, ou seja, é uma função que associa um número natural a uma fórmula.
+
+Consideraremos aqui o modelo como sendo $\mathfrak{N}$, ou seja, o modelo padrão dos números naturais compatível com a linguagem que utiliza dos símbolos operatórios usuais $\{ +, \cdot, <, S\}$, sendo $S$ a função sucessor. Definimos também $\mathscr{T}(\mathfrak{N})=\{\ulcorner \mathscr{A} \urcorner  : \vDash_{\mathfrak{N}} \mathscr{A} \}$, ou seja, o conjunto dos númjeros de Gödel de todas as fórmulas aritméticas verdadeiras no modelo padrão. Queremos provar que este conjunto não é definível. 
+
+Vamos supor, por absurdo, que ele seja definível, logo existe uma fórmula $\mathscr{F}$ (consideraremos, para este fim, que ela não tem parâmetros, já que isso não vai fazer diferença dentro do que estamos trabalhando) tal que, sendo $n\in \mathbb{N}$, $$n\in \mathscr{T}(\mathfrak{N})\leftrightarrow \mathscr{F}(n).$$ Como $n$, neste caso, corresponde a uma fórmula verdadeira $\mathscr{B}$ tal que $\ulcorner \mathscr{B} \urcorner=n$, temos que, para qualquer fórmula $\mathscr{C}$, vale \\
+
+\hfill{$\mathscr{C} \leftrightarrow \mathscr{F}(\ulcorner \mathscr{C} \urcorner)$.} \hfill{$(*)$}  \\
+
+Seja $\varphi _n$ uma enumeração nos elementos de $\textbf{Fbf}$ com uma variável livre e seja $\mathscr{D}(x)$ a fórmula $\neg \mathscr{F}(\ulcorner \varphi_x (x) \urcorner)$. Ora, existe um número natural $k$ tal que $\mathscr{D}$ é $\varphi_k$, considere a sentença $\mathscr{E}$ como sendo $\mathscr{D}(k)$, com isso temos: $$\mathscr{E} \leftrightarrow \mathscr{D}(k) \leftrightarrow \neg \mathscr{F}(\ulcorner \varphi_k (k) \urcorner)  \leftrightarrow \neg \mathscr{F}(\ulcorner \mathscr{E} \urcorner),$$ o que contradiz $(*)$.
+
+É interessante observar que este resultado pode servir como lema para demonstrar uma versão semântica do Primeiro Teorema da Incompletude de Gödel, sendo que faltaria apenas as seguintes considerações: \\
+
+a) conjuntos primitivamente recursivos, recursivos e enumeravelmente recursivos são definíveis.
+
+b) o fecho de um conjunto recursivo pelas regras de inferência é enumeravelmente recursivo. \\
+
+Com isso temos o seguinte: Suponha que uma teoria $T$ é consistente e axiomatizada por uma extensão $\Gamma$ correta (ou seja, possui $\mathfrak{N}$ como modelo) e recursiva dos axiomas básicos da aritmética, então esta teoria é incompleta. Isto se prova da seguinte maneira: o conjunto dos números de Gödel das fórmulas em $\textbf{Teo}_\Gamma$ (devido (a) e (b)) é um subconjunto definível de $\mathscr{T}(\mathfrak{N})$, que, por sua vez, não é definível, logo, existem infinitos (se fossem finitos, seria possível representá-los e $\mathscr{T}(\mathfrak{N})$ não seria indefinível) elementos $n\in \mathscr{T}(\mathfrak{N})$ cuja fórmula correspondente $\mathscr{A}$ não está em $\textbf{Teo}_\Gamma$, portanto $\Gamma \nvdash \mathscr{A}$, além disso, como a extensão é correta, $\Gamma \nvdash \neg \mathscr{A}$ também, pois esta sentença é falsa; também dizemos, neste caso, que $\mathscr{A}$ é indecidível por $T$ e isto termina a prova da incompletude. 
+
+É bom deixar claro que, pela natureza desta exposição, o que foi feito até aqui foi apenas um rascunho, pois contém várias lacunas e abusos de notação. Uma exposição detalhada e formalmente correta deste tema pode ser encontrada em [6] e [7].
+
+\section{O universo L}
+
+Segue agora a definição de definabilidade mais específica e que já é interna à teoria de conjuntos; ou seja, é uma definição em que tanto a teoria quanto a meta-teoria se dá inteiramente na linguagem da teoria de conjuntos. Portanto, temos:   
+
+\begin{mydef}
+    
+    Seja $M$ um conjunto e o par $(M,\in)$ a menor estrutura compatível com a linguagem da teoria de conjuntos cujo universo contém $M$ e as fórmulas são interpretadas com $\in^M$ \footnote{Isto consiste na relativização do símbolo pertence ao conjunto $M$, sendo que o que mudará para fórmulas neste caso é que todas as que tiverem variáveis quantificadas, as mesmas deverão percorrer somente elementos de $M$, por exemplo, uma fórmula $(\forall x)x\in A\vee x\notin B$ passa a ser $(\forall x\in M)x\in A\vee x\notin B$} . Um conjunto $S\subset M$ é definível em $(M,\in)$ se, para alguma fórmula $\mathscr{A}$ da linguagem em questão, existe $a_1,...,a_n\in M$ tal que $$x\in S \ \leftrightarrow \ \  \vDash_{(M,\in)} \mathscr{A}(x,a_1,...,a_n).$$
+    
+\end{mydef}
+
+Aqui fica claro que a noção de definibilidade é sempre meta-teórica, ou seja, apenas numa teoria ``maior'' é possível enxergar quem é definível numa teoria menor, como é o caso da teoria dos conjuntos ver quem é definível em $(M,\in)$, que é uma estrutura menor. 
+
+Com isso definimos o seguinte: $$\text{def}(M)=\{ X\subset M : X \text{ é definível em } (M,\in) \}.$$ Podemos observar que $M\in \text{def}(M)$ e $M\subset \text{def}(M) \subset \wp (M)$. A partir desta notação podemos finalmente enunciar a seguinte: 
+
+\begin{mydef}
+    
+    Definimos a classe dos conjuntos construtíveis, também chamada de Universo Construtível $L$, da seguinte forma indutiva: \\
+    
+    i) $L_0=\emptyset$;
+    
+    ii) $L_{\alpha+1}=\text{def}(L_\alpha)$; 
+    
+    iii) $L_{\alpha} =\displaystyle\bigcup _{\beta < \alpha} L_\beta$ para o caso de $\alpha$ ser limite;
+    
+    iv) $L=\displaystyle\bigcup _{\textbf{Or}(\beta) } L_\beta$.
+    
+    
+\end{mydef}
+
+
+A afirmação de que $V=L$ é chamada de Axioma da Construtibilidade e consiste em dizer que, para todo conjunto $x$ existe um ordinal $\alpha$ tal que $x\in L_\alpha$. A seguir enunciaremos alguns fatos básicos sobre $L$:
+
+\begin{prop} 
+
+    \ \\
+    
+    i) os conjuntos $L_\alpha$ e a classe $L$ são transitivos.
+    
+    ii) se $\alpha$ é um ordinal, então $\alpha \in L$.
+    
+    iii) $L$ é um modelo de ZF.
+    
+    iv) $L$ é o menor modelo interno de ZF, ou seja, é a menor classe transitiva contendo os ordinais que é modelo de ZF.
+    
+    v) $V=L$ é válido em $L$.
+    
+    vi) $V=L$ implica o Axioma da Escolha, portanto o mesmo é consistente relativamente a ZF. 
+    
+    vii) $V=L$ implica a Hipótese Generalizada do Contínuo, portanto a mesma é consistente relativamente a ZF.
+    
+\end{prop}
+
+É interessante comentar um dos métodos para demonstrar (iv) e (v) pois ele realmente dá sentido ao termo ``construtível'', já que, pelo que foi feito até então, seríamos levados a crer que $L$ deveria se chamar Universo Definível, e não Construtível. A partir de operações elementares (a lista completa está em [3]) define-se os conjuntos que são construtíveis a partir de uma combinação finita delas e, com isso, demonstra-se que o conjunto $\text{def}(M)$ é a intersecção entre o fecho de $M$ por estas operações e o conjunto $\wp(M)$, ou seja, é possível concluir que construtível e definível são sinônimos. 
+
+A afirmação (vi) se demonstra definindo explicitamente uma boa ordem definível em $L$, o que inclusive prova algo mais forte: o Axioma da Escolha Global. Para demonstrar (vii) basta verificar que $|L_{\omega_{\alpha+1}}|=\aleph_{\alpha+1}$ e $\wp^L (\omega_\alpha)\subset L_{\omega_{\alpha+1}}$, ou seja, concluindo que $|\wp^L (\omega_\alpha)|\leq \aleph_{\alpha+1}$.
+
+\section{Algumas Aplicações}
+
+Além das aplicações mencionadas anteriormente, temos primeiramente que: \\
+
+- $V=L$ implica $\Diamond$. \\
+
+Ou seja, o Axioma da Construtibilidade implica o Princípio Diamante que afirma que existe uma sequência de conjuntos $(S_\alpha)_{\alpha<\omega_1}$ com $S_\alpha \subset \alpha$ tal que para todo $X\subset \omega_1$ o conjunto $\{ \alpha < \omega_1 : X\cap \alpha = S_\alpha \}$ é um subconjunto estacionário de $\omega_1$, ou seja, a intersecção dele com qualquer conjunto fechado e ilimitado de $\omega_1$ é não vazia. Este princípio é bastante usado em diversas áreas e, por esta razão, o Axioma da Construtibilidade fornece várias provas de consistência em combinatória e topologia; exemplos disso podem ser visto em [4]. No caso da topologia, este axioma possui um papel bem importante em provas de independência: como $V=L$ serve como ``antagonista'' de MA+$\neg$CH, muitos resultados de independência em topologia são feitos demonstrando uma versão a partir do primeiro e sua negação com o segundo, conforme observamos em vários resultados de [8]. \\  
+
+Consideramos também a seguinte conjectura: \\
+
+- Todo ultrafiltro uniforme em um conjunto infinito é regular. \\
+
+Ou seja, todo ultrafiltro $\textbf{u}$ sobre $A$ com elementos $s$ tais que $|s|=|A|$ é tal que todo subconjunto $V\subset \textbf{u}$ com $|V|=|A|$ possui a propriedade de que a intersecção de qualquer quantidade infinita de elementos é vazia. A consistência desta afirmação em relação a ZF foi provada em [5.] no caso de $|A|$ ter $\omega_1$ elementos assumindo-se que $V=L$, sendo que Jensen melhorou a demonstração para que valesse para $\omega_n$ com $0<n<\omega$. Em [2] esta conjectura, na forma completa, se mostrou consistente com ZFC, além do fato da existência de um ultrafiltro uniforme não regular num cardinal singular (ou seja, um cardinal que é o supremo de uma sequência de ordinais abaixo dele) implica na existência de um modelo interno de ZF que possui um cardinal mensurável. \\ 
+
+Temos, por fim, o seguinte fato (demonstrado em [1]): \\
+
+- Se $V=L$ então $O^{\#}$ não existe. \\
+
+O ``conjunto'' $O^{\#}$ se define da seguinte maneira: seja uma enumeração de Gödel das fórmulas da teoria dos conjuntos com constantes adicionais $c_i$ que são interpretadas como $\aleph_i$; um número está em $O^{\#}$ se, e somente se, corresponde a uma sentença verdadeira no universo $L$. Devido a uma versão análoga ao teorema da indefinibilidade enunciado anteriormente,  $O^{\#}$ não é definível em ``condições normais'', porém a sua existência pode ocorrer diante de algum cardinal grande adequado. Com isto, temos que o Axioma da Construtibilidade não é consistente com a existência de alguns cardinais grandes. 
+
+
+
+
+
+
+
+\ \\
+\ \\
+
+\section{Bibliografia}
+
+\ \\
+
+[1] Chang, C. C. e Keisler, H. J. \textit{Model theory} . Bull. Amer. Math. Soc. 82 (1976), no. 3. \\
+
+[2] Donder, H. D.  \textit{Regularity of ultrafilters and the core model.} Israel J. Math. (1988) 63: 289. \\
+
+[3] Jech, T. \textit{Set Theory, 3rd millennium (revised) ed.} Springer Monographs in Mathematics, Springer, 2003. \\
+
+[4] Larson, Paul B. e Tall, Franklin D. \textit{Locally compact perfectly normal spaces may all be paracompact}, Fundamenta Mathematicae (2010)  210. 3: 285-300.
+
+[5] Prikry, K.  \textit{On a problem of Gillman and Keisler}. Annals of Mathematical Logic  (1970) 2 (2):179-187. \\
+
+[6] Shoenfield, Joseph R. \textit{Mathematical Logic}. Reading, MA: Addison-Wesley Pub., 1967.  \\
+
+[7] Tourlakis, George J. \textit{Lectures in Logic and Set Theory}. Vol. 1. Cambridge, UK: Cambridge UP, 2003.  \\
+
+[8] Watson, W. S. \textit{Locally compact normal spaces in the constructible universe}, Can. J. Math. 34 (1982),
+1091-1096.
+
+ 
+
+
+
+\end{document}
+
+
+
+
+
